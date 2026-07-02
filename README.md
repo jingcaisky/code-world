@@ -207,9 +207,7 @@ AGENT_NATIVE_REINDEX="false"                     # 设为 "true" 强制重建索
 
 框架内置了 MCP 支持（用于 Claude Desktop / Cursor 等 IDE），但我们的 30 个 Actions 通过 Function Calling 在 Chat 内部调用，无需额外注册。
 
-## 许可证
-
-本项目基于 [Agent-Native](https://github.com/nichochar/framework) 框架模板构建。
+## 开源许可
 
 ---
 

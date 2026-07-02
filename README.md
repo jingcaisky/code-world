@@ -214,3 +214,7 @@ AGENT_NATIVE_REINDEX="false"                     # 设为 "true" 强制重建索
 <p align="center">
   <strong>Code World v2.0</strong> — 让 AI 真正理解你的代码
 </p>
+
+---
+
+**联系方式：QQ 323710775**

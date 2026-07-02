@@ -6,17 +6,16 @@
 
 <p align="center">
   <a href="#功能特性">功能</a> •
-  <a href="#技术架构">架构</a> •
   <a href="#快速开始">快速开始</a> •
   <a href="#环境配置">配置</a> •
-  <a href="#项目结构">项目结构</a>
+  <a href="#技术栈">技术栈</a>
 </p>
 
 ---
 
 ## 简介
 
-**Code World** 是一款基于 [Agent-Native](https://github.com/nichochar/framework) 框架构建的 **AI 智能编程助手**，采用 **对话优先 (Chat-First)** 设计理念。它实现了业界领先的 **Pre-L0 混合检索 + RAG 增强生成** 架构，将关键词搜索与语义理解深度融合，让 AI 编程助手具备真正的代码理解和知识检索能力。
+Code World 是一款对话式 AI 编程助手。它能看懂你的代码库，理解你的真实意图，帮你写代码、修 Bug、做代码审查——整个过程就像与一位熟悉项目的资深同事并肩协作，自然流畅。
 
 ### 核心亮点
 
@@ -53,72 +52,9 @@
 5. **Sub-Agent Review (子代理审查)** — 类型安全 / 安全漏洞 / 代码风格三级评分
 6. **Knowledge Sync (知识同步)** — 三层存储自动同步，零手动维护
 
-## 技术架构
 
-```
-User Input
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────┐
-│  Pre-L0: Hybrid Retrieval (混合检索)                        │
-│  ├─ Keyword Channel:  TF-IDF → vector-store → cosine sim   │
-│  └─ Semantic Channel: Zvec → embedding API → ranked list   │
-│                    ↓ RRF Fusion (Reciprocal Rank Fusion)     │
-└─────────────────────────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────┐
-│  L0: Context Assembly (上下文组装)                           │
-│  RAG Context + Thread History + Memory + Learnings + Rules  │
-│  → Token Budget (8K max, priority truncation)               │
-└─────────────────────────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────┐
-│  L1: Search + Triage (搜索 + 分流)                          │
-│  ├─ Parallel: Hybrid / MCP / Web Search                    │
-│  └─ Gemini Flash: simple? → direct answer                  │
-│                     complex? → L2 orchestration             │
-└─────────────────────────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────┐
-│  L2: Plan Generation (计划生成)                             │
-│  Main Model → structured plan → user confirmation          │
-└─────────────────────────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────┐
-│  L3: Sub-Agent Execution + Review (子代理执行 + 审查)       │
-│  └─ frontend-designer / backend-creator / test-writer /     │
-│    code-reviewer → dependency-scheduled parallel execution  │
-│    → critical/warning/suggest grading                       │
-└─────────────────────────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────┐
-│  L4: Integration + Memory (集成 + 记忆)                     │
-│  Change report + OM compaction + learnings + CodeGraph      │
-└─────────────────────────────────────────────────────────────┘
-```
 
-### 数据流
 
-```
-Server Startup
-  │
-  └─ knowledge-sync.ts (Nitro hook: "ready")
-       ├─ AGENTS.md        → SQL resources 表
-       ├─ Project files    → vector_index 表 (TF-IDF)
-       └─ All above        → Zvec 向量库 (语义) [可选]
-```
-
-```
-Content Indexing (Dual-Write)
-  │
-  ├─ Local:  chunk → TF-IDF embed → SQLite vector_index
-  └─ Remote: chunk → Zvec upsert  → Zvec Vector DB [可选]
-```
 
 ## 快速开始
 
@@ -222,67 +158,9 @@ AGENT_NATIVE_REINDEX="false"                     # 设为 "true" 强制重建索
 | Gemini 分流 | `GEMINI_API_KEY` | 使用关键词规则分流 |
 | 完整代码审查 | `oxlint` 二进制 | 仅 TypeScript 类型检查 |
 
-## 项目结构
 
-```
-templates/chat/
-├── app/                          # React Router SSR 前端
-│   ├── components/              # UI 组件 (shadcn/ui)
-│   ├── lib/                      # 客户端工具函数
-│   └── routes/                   # 页面路由
-│
-├── actions/                      # Agent 工具定义 (30 个)
-│   ├── zvec-search.ts           # ⭐ 混合搜索 (关键词+语义+RRF)
-│   ├── web-search.ts            # Web 搜索 (Tavily/SerpAPI)
-│   ├── mcp-file-read.ts         # 精确文件读取
-│   ├── index-content.ts         # 内容索引 (双写)
-│   ├── file-create.ts           # 文件创建
-│   ├── file-update.ts           # 文件更新
-│   ├── file-delete.ts           # 文件删除
-│   ├── run-command.ts           # 命令执行
-│   ├── run-test.ts              # 测试运行
-│   ├── code-review.ts           # 代码审查管道
-│   └── ... (20+ more actions)
-│
-├── server/                       # 后端服务 (Nitro)
-│   ├── lib/
-│   │   ├── token-budget.ts      # P0: Token 预算管理
-│   │   ├── context-assembler.ts # P0: 上下文组装 (RAG 感知)
-│   │   ├── embedder.ts          # P1: TF-IDF + 语义 Embedding
-│   │   ├── vector-store.ts      # P1: SQLite 向量存储
-│   │   ├── zvec-client.ts       # P1: Zvec 向量数据库客户端
-│   │   ├── hybrid-retriever.ts  # P1: ⭐ 混合检索器 (Pre-L0)
-│   │   ├── content-indexer.ts   # P1: 双写索引管道
-│   │   ├── search-orchestrator.ts # P1: 搜索编排 (L1)
-│   │   ├── triage-service.ts    # P1: RAG 增强 Gemini 分流
-│   │   ├── plan-engine.ts       # P2: 计划生成引擎 (L2)
-│   │   ├── sub-agent-runner.ts  # P3: 子代理执行器 (L3)
-│   │   ├── review-checker.ts    # P3: 审查评分器 (L3)
-│   │   ├── change-reporter.ts   # P4: 变更报告 (L4)
-│   │   ├── memory-writer.ts     # P4: 记忆写入 (L4)
-│   │   ├── knowledge-sync.ts    # SYS: SQL 知识同步
-│   │   └── knowledge-sync-zvec.ts # SYS: Zvec 语义同步
-│   ├── plugins/
-│   │   ├── plan-routes.ts       # 计划 API 路由
-│   │   └── knowledge-sync.ts    # 启动时自动同步钩子
-│   └── routes/                  # API 路由
-│
-├── config/                       # 配置文件
-│   └── const.ts                 # 常量 + 特性开关
-│
-├── docs/                         # 文档
-│   ├── architecture-spec.md     # 完整架构规范 (v2.0, 370 行)
-│   └── integration-plan.md      # 集成计划
-│
-├── public/                       # 静态资源
-├── data/                         # 运行时数据
-│
-├── AGENTS.md                     # Agent 行为指南 (v2.0)
-├── CHANGELOG.md                  # 变更日志
-├── package.json                  # 项目配置
-├── vite.config.ts               # Vite + SSR 配置
-└── react-router.config.ts       # React Router 配置
-```
+
+
 
 ## 技术栈
 

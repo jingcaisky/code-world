@@ -1,220 +1,211 @@
-# Code World v2.0 — AI 智能编程助手
+# Multi-Agent — AI 营销 SaaS 平台
 
-<p align="center">
-  <strong>5 层混合检索架构 · 30 个 Agent 工具 · RAG 检索增强 · Zvec 向量数据库</strong>
-</p>
+一站式 AI 营销全栈解决方案，基于 **TypeScript + Next.js** 前端、**Python + FastAPI + MZmulti_agent** 编排层、**PostgreSQL + pgvector** 数据底座构建。
 
-<p align="center">
-  <a href="#功能特性">功能</a> •
-  <a href="#快速开始">快速开始</a> •
-  <a href="#环境配置">配置</a> •
-  <a href="#技术栈">技术栈</a>
-</p>
+> **愿景**：以 MZmulti_agent 智能体编排为核心，为营销团队提供从内容洞察、策略规划到多平台分发的全链路 AI 化解决方案。
 
 ---
 
-## 简介
+## 📦 技术栈
 
-Code World 是一款对话式 AI 编程助手。它能看懂你的代码库，理解你的真实意图，帮你写代码、修 Bug、做代码审查——整个过程就像与一位熟悉项目的资深同事并肩协作，自然流畅。
+| 层级 | 技术选型 | 说明 |
+|------|----------|------|
+| **前端语言** | TypeScript (TSX) | 类型安全，Next.js 官方推荐 |
+| **前端框架** | Next.js 15 (React 19) | SSR、App Router、API 路由代理、多语言 i18n |
+| **后端语言** | Python 3.11+ | AI 生态核心语言 |
+| **后端框架** | FastAPI | 异步高性能、WebSocket 网关、自动 OpenAPI 文档 |
+| **AI 编排** | LangGraph | 多智能体工作流、状态管理、条件路由、人工审批 (HITL) |
+| **数据库** | PostgreSQL + pgvector | 业务数据存储 + 向量检索（RAG 底座） |
+| **缓存/队列** | Redis | Session 缓存、速率限制、Celery 消息队列 |
+| **异步任务** | Celery | 后台耗时任务（批量生成、数据同步） |
+| **容器化** | Docker + Docker Compose | 一键启动、环境隔离 |
+| **国际化** | next-intl (zh / en / pl) | 多语言路由、完整翻译框架 |
 
-### 核心亮点
+---
 
-| 能力 | 说明 |
-|------|------|
-| 🧠 **混合检索** | TF-IDF 关键词 + Zvec 语义向量双通道，RRF 融合排序 |
-| 🔍 **RAG 增强** | Pre-L0 检索结果注入上下文，从第一轮对话即增强模型认知 |
-| ⚡ **Gemini Flash 分流** | 快速分类简单/复杂任务，节省主模型 Token 消耗 |
-| 🛠️ **30 个工具** | 覆盖编辑、搜索、执行、质量、Git、洞察全链路 |
-| 💾 **三层知识同步** | AGENTS.md → SQL → Zvec 自动同步，启动即用 |
-| 📋 **用户确认机制** | 主模型生成计划 → 用户确认 → 执行，杜绝盲改代码 |
+## ✨ 已实现功能
 
-## 功能特性
+### 🧱 项目基础架构
+- 前后端分离项目骨架（frontend/ + backend/）
+- Docker Compose 多容器编排（Backend + PostgreSQL + Redis + Celery + Flower）
+- Alembic 数据库迁移机制，已成功执行
+- 完整的 CI/测试体系（后端 100% 覆盖率）
 
-### 30 个 Agent 工具
+### 🔐 用户与认证
+- JWT 双 Token 机制（Access + Refresh Token）
+- Google OAuth 社交登录
+- API Key 鉴权
+- 角色权限系统（Admin / User）
+- 多语言路由支持 `/zh`（默认）、`/en`、`/pl`
 
-| 分类 | 工具 |
-|------|------|
-| ✏️ **编辑** | `file-create`, `file-update`, `file-delete`, `file-batch-update`, `file-restore`, `mcp-file-read` |
-| 🔍 **搜索** | `zvec-search`(混合), `web-search`, `grep-search`, `image-analyze` |
-| ⚡ **执行** | `run-command`, `run-test`, `terminal`, `process-manage` |
-| ✅ **质量** | `type-check`, `lint-fix`, `format-code`, `code-review` |
-| 🌿 **Git** | `git-ops`, `diff-preview` |
-| 📊 **洞察** | `code-insights` |
-| 📦 **项目** | `index-content`(双写), `env-ops`, `dependency-manage`, `sync-knowledge` |
-| 🧭 **导航** | `view-screen`, `navigate`, `launch-app`, `hello` |
+### 🤖 AI 供应商管理
+- **前端**：`/settings/providers` 配置页面
+- **预置供应商**：Google Gemini、GitHub Models、NVIDIA NIM、ModelScope、Cohere、Agnes AI
+- **自定义供应商**：用户可自由添加名称和 API URL
+- **后端 API**：`/api/v1/me/providers` 完整 CRUD
+- **数据库持久化**：`user_providers` 表安全存储 API Key
 
-### 6 大 AI 能力
+### 💬 AI 对话引擎（Chat）
+- WebSocket 实时流式输出
+- 多轮对话、思维链展示
+- 文件上传与分析（PDF、DOCX、TXT、图片等 80+ 格式）
+- 模型切换、温度控制、知识库绑定
+- 斜杠命令（/clear、/regen、/summarize 等）
+- 对话分享、导出、评分系统
+- 工具调用卡片（Web 搜索、RAG、Python 执行等）
+- 人工审批 (Human-in-the-Loop)
 
-1. **Hybrid Retrieval (混合检索)** — 关键词 TF-IDF + 语义 Embedding 双通道并行，RRF 融合排序
-2. **RAG 增强 (检索增强生成)** — Pre-L0 检索结果注入 L0/L1/L2 各层 Prompt
-3. **Intelligent Triage (智能分流)** — Gemini Flash 快速分类，复杂任务走编排管道
-4. **Plan-Confirm-Execute (计划确认执行)** — 用户始终掌控代码变更
-5. **Sub-Agent Review (子代理审查)** — 类型安全 / 安全漏洞 / 代码风格三级评分
-6. **Knowledge Sync (知识同步)** — 三层存储自动同步，零手动维护
+### 📚 知识库（RAG）
+- PostgreSQL pgvector 向量存储
+- 文件上传 + 自动分块 + 向量化
+- 多 Collection 管理
+- 同步源接入（Google Drive、S3 等插件式 Connector）
+- 混合搜索（BM25 + 向量）
 
+### 🏢 组织管理
+- 多组织工作空间
+- 角色层级（Owner / Admin / Member / Viewer）
+- 邀请机制（邮箱 + Token）
+- 组织级集成配置
 
+### 💳 计费系统
+- Stripe 订阅管理
+- Checkout / Portal 集成
+- 信用额度与用量追踪
+- 发票记录
 
+### ⚙️ 设置与管理
+- 个人资料 / 账户安全
+- 外观主题（亮色 / 暗色）
+- 通知偏好
+- 斜杠命令自定义
+- 管理后台（SQLAdmin + REST API）
+- 系统健康监控
 
+---
 
-## 快速开始
+## 🚀 快速开始
 
 ### 前置要求
 
-- **Node.js** >= 22.22.0
-- **pnpm** >= 9.0.0
+- Docker Desktop
+- Node.js >= 18
+- Python 3.11+
+- pnpm / bun / npm
 
-### 一键启动 (Windows)
+### 一键启动
 
 ```bash
-start-chat.bat
+# Windows 双击 start.bat，脚本会自动：
+# 1. 创建后端 .env 配置文件
+# 2. 启动 Docker 容器（PostgreSQL + Redis）
+# 3. 执行数据库迁移
+# 4. 启动 FastAPI 后端
+# 5. 启动 Next.js 前端开发服务器
 ```
-
-该脚本自动完成：
-1. 安装依赖 (`pnpm install`)
-2. 启动开发服务器 (`agent-native dev`)
-3. 等待端口就绪后打开浏览器
 
 ### 手动启动
 
 ```bash
-# 进入项目目录
-cd templates/chat
-
-# 安装依赖
-pnpm install
-
-# 初始化 .env（如不存在）
+# 后端
+cd backend
 cp .env.example .env
+uv run uvicorn app.main:app --reload --port 8000
 
-# 启动开发服务器
-pnpm dev
+# 前端
+cd frontend
+bun install
+bun dev
 ```
 
-访问 http://localhost:8080 即可使用。
+### 访问地址
 
-## 环境配置
-
-### 必选（核心功能可用）
-
-`.env` 文件基础配置：
-
-```bash
-# 关闭认证（开发模式）
-AUTH_DISABLED=true
-```
-
-以下功能 **无需任何额外配置即可使用**：
-
-- ✅ 混合关键词搜索 (TF-IDF)
-- ✅ 文件 CRUD 操作
-- ✅ 代码执行 (命令/测试/终端)
-- ✅ 类型检查 + 代码格式化
-- ✅ Git 操作 + Diff 预览
-- ✅ 上下文压缩 + 观察记忆
-- ✅ Learnings 用户偏好持久化
-- ✅ AGENTS.md ↔ SQL 自动同步
-- ✅ Token 预算管理
-
-### 可选（增强功能）
-
-```bash
-# ════════════════════════════════════════
-# Zvec 向量数据库 (语义搜索)
-# ════════════════════════════════════════
-AGENT_NATIVE_ZVEC_ENDPOINT="http://localhost:9090/api"
-AGENT_NATIVE_ZVEC_API_KEY=""                    # 可选
-AGENT_NATIVE_ZVEC_MODEL="bge-large-zh-v1.5"     # Embedding 模型
-
-# ════════════════════════════════════════
-# Web 搜索
-# ════════════════════════════════════════
-AGENT_NATIVE_WEB_SEARCH_PROVIDER="tavily"        # tavily | serpapi | bing
-AGENT_NATIVE_TAVILY_API_KEY=""                   # Tavily API Key
-
-# ════════════════════════════════════════
-# Gemini Flash 分流 (L1 Triage)
-# ════════════════════════════════════════
-AGENT_NATIVE_GEMINI_API_KEY=""                   # Google Gemini API Key
-
-# ════════════════════════════════════════
-# 混合检索调优
-# ════════════════════════════════════════
-AGENT_NATIVE_HYBRID_SEARCH_TIMEOUT="1500"        # 搜索超时 (ms)
-AGENT_NATIVE_RAG_CONTEXT_BUDGET="2000"           # RAG 注入最大 Token 数
-
-# ════════════════════════════════════════
-# 调试
-# ════════════════════════════════════════
-AGENT_NATIVE_DEBUG_CONTEXT="0"                   # 设为 "1" 日志 Token 预算
-AGENT_NATIVE_REINDEX="false"                     # 设为 "true" 强制重建索引
-```
-
-### 功能依赖矩阵
-
-| 功能 | 依赖 | 无依赖时的行为 |
-|------|------|---------------|
-| Zvec 语义搜索 | `ZVEC_ENDPOINT` | 降级为纯 TF-IDF 关键词搜索 |
-| Web 搜索 | `TAVILY_API_KEY` | 不可用 |
-| Gemini 分流 | `GEMINI_API_KEY` | 使用关键词规则分流 |
-| 完整代码审查 | `oxlint` 二进制 | 仅 TypeScript 类型检查 |
-
-
-
-
-
-## 技术栈
-
-| 类别 | 技术 |
+| 服务 | 地址 |
 |------|------|
-| **框架** | Agent-Native Core + React Router v8 (SSR) |
-| **语言** | TypeScript 6.0 (Strict Mode) |
-| **构建** | Vite + Nitro (Server Engine) |
-| **UI** | shadcn/ui + Radix UI + Tailwind CSS v4 |
-| **数据** | SQLite (本地) / Postgres (部署) via libSQL |
-| **向量** | SQLite TF-IDF (内置) + Zvec (可选远程) |
-| **终端** | xterm.js + node-pty |
-| **测试** | Vitest + Testing Library |
-| **AI** | Gemini Flash (Triage) + 可插拔主模型 |
+| **前端界面** | http://localhost:3000 |
+| **后端 API** | http://localhost:8000 |
+| **API 文档 (Swagger)** | http://localhost:8000/docs |
+| **管理后台** | http://localhost:8000/admin |
+| **后端可观测 (Logfire)** | 配置后可用 |
 
-## 开发状态
+### 默认管理员
 
-| 阶段 | 模块 | 状态 |
-|------|------|------|
-| **P0** | Token 预算、上下文组装、搜索 Actions、配置 | ✅ 完成 |
-| **P1** | 搜索编排、分流服务、Embedding、向量存储、内容索引 | ✅ 完成 |
-| **P2** | 计划引擎、进度推送 (SSE) | ✅ 完成 |
-| **P3** | 子代理执行、审查评分、代码审查 Action | ✅ 完成 |
-| **P4** | 变更报告、记忆写入 | ✅ 完成 |
-
-| 组件 | 状态 |
-|------|------|
-| 向量数据库 (SQLite TF-IDF) | ✅ 内置，零依赖 |
-| Zvec 远程向量库 | ✅ 可选接入 |
-| 混合检索 (Hybrid RRF) | ✅ 核心能力 |
-| RAG 检索增强 | ✅ 全链路注入 |
-| Agent Chat 集成 | ✅ 30 工具已注册 |
-| Web 搜索 | 🟡 需要 API Key |
-| Gemini 分流 | 🟡 需要 API Key (有降级) |
-
-## 关于 MCP
-
-本项目使用 **Agent Tool (Action)** 协议（Function Calling），**不是** MCP 协议：
-
-| 概念 | 协议 | 调用方 | 端点 |
-|------|------|--------|------|
-| Agent Tool (Action) | Function Calling | Chat Agent | `/_agent-native/actions/:name` |
-| MCP Tool | MCP Protocol | 外部 IDE | `/_agent-native/mcp` |
-
-框架内置了 MCP 支持（用于 Claude Desktop / Cursor 等 IDE），但我们的 30 个 Actions 通过 Function Calling 在 Chat 内部调用，无需额外注册。
-
-## 开源许可
+| 项目 | 值 |
+|------|-----|
+| 邮箱 | `admin@multi-agent.local` |
+| 密码 | 注册后自动提升为管理员 |
 
 ---
 
-<p align="center">
-  <strong>Code World v2.0</strong> — 让 AI 真正理解你的代码
-</p>
+## 🧪 测试
+
+```bash
+cd backend
+uv run pytest           # 运行全部测试
+uv run pytest -v        # 详细输出
+uv run pytest tests/    # 指定目录
+
+cd frontend
+bun test                # 前端单元测试
+bun test:e2e            # E2E 测试（Playwright）
+```
 
 ---
 
-**联系方式：QQ 323710775**
+## 🌐 国际化
+
+项目支持三种语言，默认中文：
+
+| 语言 | 代码 | 默认 | 翻译覆盖 |
+|------|:----:|:----:|:--------:|
+| **简体中文** | `zh` | ✅ | 100% |
+| English | `en` | | 100% |
+| Polski | `pl` | | 100% |
+
+---
+
+## 🧩 项目结构
+
+```
+multi_agent/
+├── backend/                  # Python FastAPI 后端
+│   ├── app/
+│   │   ├── api/              # API 路由 & 异常处理
+│   │   ├── core/             # 配置、安全、中间件、缓存
+│   │   ├── db/models/        # SQLAlchemy 数据模型
+│   │   ├── repositories/     # 数据访问层
+│   │   ├── schemas/          # Pydantic 请求/响应模型
+│   │   ├── services/         # 业务逻辑层
+│   │   ├── agents/           # AI Agent 工具 & 提示词
+│   │   ├── workers/          # Celery 后台任务
+│   │   └── commands/         # CLI 管理命令
+│   ├── alembic/              # 数据库迁移
+│   └── tests/                # 测试套件
+│
+├── frontend/                 # Next.js 前端
+│   ├── src/
+│   │   ├── app/              # App Router 页面 & API 路由
+│   │   ├── components/       # UI 组件
+│   │   ├── hooks/            # React Hooks
+│   │   ├── stores/           # Zustand 状态管理
+│   │   ├── lib/              # API 客户端、工具函数
+│   │   └── messages/         # i18n 翻译文件
+│   └── public/               # 静态资源
+│
+├── docker-compose.yml        # 容器编排
+├── Makefile                  # 常用命令
+├── AGENTS.md                 # AI 代理工作手册
+└── start.bat                 # Windows 一键启动
+```
+
+---
+
+## 📄 许可证
+
+MIT License — 详见 [LICENSE](LICENSE) 文件。
+
+---
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 了解开发规范。

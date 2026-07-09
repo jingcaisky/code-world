@@ -1,0 +1,1017 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "search": "搜索",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "submit": "提交",
+    "close": "关闭",
+    "confirm": "确认",
+    "yes": "是",
+    "no": "否",
+    "done": "完成",
+    "retry": "重试",
+    "skipToContent": "跳过并转到内容",
+    "live": "在线",
+    "offline": "离线"
+  },
+  "navigation": {
+    "home": "首页",
+    "dashboard": "控制台",
+    "profile": "个人资料",
+    "settings": "设置",
+    "logout": "退出登录"
+  },
+  "nav": {
+    "dashboard": "控制台",
+    "chat": "对话",
+    "knowledge": "知识管理",
+    "knowledgeBases": "知识库",
+    "knowledgeBasesDesc": "文档与数据集合",
+    "rag": "检索增强生成 (RAG)",
+    "ragSearch": "RAG 搜索",
+    "ragSearchDesc": "查询与导入",
+    "team": "团队",
+    "organizations": "组织管理",
+    "organizationsDesc": "工作空间与成员",
+    "billing": "计费订阅",
+    "admin": "系统管理",
+    "profile": "个人中心",
+    "settings": "个人设置",
+    "overview": "概览",
+    "users": "用户管理",
+    "conversations": "会话管理",
+    "ratings": "评分分析",
+    "stripeEvents": "Stripe 事件",
+    "systemHealth": "系统健康度",
+    "system": "系统设置",
+    "account": "账户设置",
+    "notifications": "通知管理",
+    "appearance": "外观展示",
+    "slashCommands": "斜杠命令",
+    "search": "搜索...",
+    "home": "首页",
+    "kb": "知识库",
+    "usage": "资源使用量",
+    "credits": "额度余额",
+    "invoices": "发票账单",
+    "paymentMethods": "支付方式",
+    "subscription": "订阅计划",
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出登录",
+    "toggleMenu": "切换导航栏",
+    "navigate": "导航",
+    "apiDocs": "API 文档",
+    "responseRatings": "回复评分",
+    "allConversations": "所有对话",
+    "settingsSection": "设置",
+    "billingSection": "计费"
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册账户",
+    "email": "电子邮箱",
+    "password": "输入密码",
+    "confirmPassword": "确认新密码",
+    "forgotPassword": "忘记密码了？",
+    "noAccount": "还没有账号？",
+    "hasAccount": "已经有账号？",
+    "loginSuccess": "登录成功",
+    "registerSuccess": "账号注册成功",
+    "logoutSuccess": "退出登录成功",
+    "invalidCredentials": "邮箱或密码错误",
+    "emailRequired": "邮箱是必填项",
+    "passwordRequired": "密码是必填项",
+    "passwordMismatch": "两次输入的密码不一致",
+    "continueWithGoogle": "使用 Google 登录",
+    "signUpWithGoogle": "使用 Google 注册",
+    "orContinueWith": "或使用其他方式继续",
+    "orRegisterWith": "或使用邮箱注册",
+    "redirecting": "正在重定向...",
+    "loggingIn": "正在登录...",
+    "creatingAccount": "正在创建账户...",
+    "nameOptional": "您的称呼 (可选)",
+    "createAccount": "创建账户",
+    "welcomeBack": "欢迎回来",
+    "getStarted": "让我们开始设置吧",
+    "forgotShort": "忘记了？",
+    "namePlaceholder": "输入您的姓名",
+    "emailPlaceholder": "name@company.com",
+    "orSignInWith": "或使用以下方式登录",
+    "orSignUpWith": "或使用以下方式注册",
+    "resetPassword": {
+      "eyebrow": "重置密码",
+      "heading": "设置新密码",
+      "intro": "请选择一个强密码。长度至少为8个字符，且包含大小写字母和数字。",
+      "newPassword": "新密码",
+      "confirm": "确认新密码",
+      "passwordsMatch": "密码匹配",
+      "passwordsDontMatch": "密码不一致",
+      "submit": "更新密码",
+      "submitting": "正在更新...",
+      "minLength": "密码必须至少为 8 个字符",
+      "successToast": "密码已成功更新。请用新密码登录。",
+      "invalidLink": "重置链接无效或已过期。",
+      "backToSignIn": "返回登录",
+      "strengthWeak": "弱",
+      "strengthFair": "一般",
+      "strengthGood": "强",
+      "strengthStrong": "极强"
+    },
+    "magicLink": {
+      "verifying": "正在登录中...",
+      "verifyingHint": "请稍候，我们正在验证您的免密登录链接。",
+      "success": "已登录",
+      "successHint": "正在重定向至您的工作区...",
+      "errorHeading": "无法登录",
+      "errorMissingToken": "缺少 Token。请重新请求登录链接。",
+      "errorInvalid": "免密登录链接无效或已过期。",
+      "signInWithPassword": "使用密码登录",
+      "requestNewLink": "请求新链接"
+    }
+  },
+  "profile": {
+    "title": "个人资料",
+    "personalInfo": "个人信息",
+    "name": "姓名",
+    "email": "电子邮箱",
+    "changePassword": "修改密码",
+    "currentPassword": "当前密码",
+    "newPassword": "新密码",
+    "updateProfile": "更新个人信息",
+    "deleteAccount": "注销账户",
+    "deleteAccountWarning": "此操作不可撤销。您的所有数据都将被永久删除。"
+  },
+  "chat": {
+    "title": "智能对话",
+    "newChat": "新建对话",
+    "sendMessage": "输入您的问题...",
+    "thinking": "思考中...",
+    "noConversations": "暂无历史对话",
+    "startNewChat": "发起一次新对话来开始吧",
+    "deleteConversation": "删除对话",
+    "archiveConversation": "归档对话",
+    "renameConversation": "重命名对话",
+    "conversations": "历史对话",
+    "rename": "重命名",
+    "share": "分享",
+    "archive": "归档",
+    "delete": "删除",
+    "newConversation": "新对话",
+    "analyzeFiles": "分析上传的文件",
+    "copyMessage": "复制",
+    "helpful": "有帮助",
+    "notHelpful": "无帮助",
+    "saveConversationToRate": "保存会话后即可进行评分",
+    "ratingRemoved": "评分已移除",
+    "thankYouFeedback": "感谢您的反馈！",
+    "ratingFailed": "提交评分失败",
+    "whatWentWrong": "出了什么问题？",
+    "feedbackHelp": "您可以选填具体建议，以帮助我们改进回复质量。",
+    "describeIssue": "描述具体问题... (可选)",
+    "skipComment": "跳过说明",
+    "shareConversation": "分享当前对话",
+    "shareDescription": "与工作区其他成员分享此对话，或生成一个公开访问的链接。",
+    "userIdOrEmail": "用户 ID 或电子邮箱",
+    "generateShareLink": "生成公开链接",
+    "sharedWith": "已分享的用户",
+    "conversationShared": "对话已成功分享",
+    "linkGenerated": "分享链接已生成",
+    "accessRevoked": "访问权限已撤销",
+    "revokeAccess": "撤销访问权限",
+    "copyLink": "链接已成功复制到剪贴板",
+    "failedToShare": "分享对话失败",
+    "failedToGenerateLink": "生成分享链接失败",
+    "failedToRevoke": "撤销访问权限失败"
+  },
+  "admin": {
+    "conversationsTitle": "管理员: 全局对话",
+    "conversationsDesc": "浏览并管理系统内所有的用户会话。",
+    "ratingsTitle": "用户评分与反馈",
+    "conversations": "历史会话",
+    "users": "注册用户",
+    "search": "搜索...",
+    "clearUserFilter": "清除用户筛选",
+    "title": "标题",
+    "owner": "所有者",
+    "messages": "消息数",
+    "created": "创建时间",
+    "status": "状态",
+    "untitled": "未命名会话",
+    "readOnly": "条消息 (只读)",
+    "noConversations": "没有找到会话。",
+    "noUsers": "没有找到用户。",
+    "view": "查看",
+    "viewChats": "查看对话",
+    "email": "电子邮箱",
+    "name": "姓名",
+    "joined": "加入时间",
+    "pageOf": "第 {page} 页，共 {total} 页",
+    "total": "共 {count} 条",
+    "allRatings": "所有评分",
+    "likesOnly": "仅赞同",
+    "dislikesOnly": "仅反对",
+    "withCommentsOnly": "仅带评语",
+    "export": "导出数据",
+    "totalRatings": "评分总数",
+    "likes": "赞同数",
+    "dislikes": "反对数",
+    "averageRating": "平均分",
+    "ratingsOverTime": "评分趋势变化",
+    "date": "日期",
+    "rating": "评分",
+    "comment": "评语",
+    "message": "消息内容",
+    "user": "用户",
+    "actions": "操作",
+    "viewConversation": "查看完整对话",
+    "accessDenied": "权限不足，拒绝访问"
+  },
+  "errors": {
+    "generic": "系统出了点问题",
+    "notFound": "未找到页面",
+    "unauthorized": "您没有权限查看此页面",
+    "forbidden": "禁止访问",
+    "serverError": "服务器发生内部错误，请稍后再试。",
+    "networkError": "网络连接异常，请检查您的网络设置。"
+  },
+  "organizations": {
+    "title": "组织管理",
+    "description": "管理您所在的组织并在它们之间快速切换。",
+    "newOrg": "创建新组织",
+    "personal": "个人工作区",
+    "manage": "管理组织",
+    "switchTo": "切换到",
+    "noOrgs": "您目前没有加入任何组织",
+    "createFirst": "创建您的第一个组织",
+    "createTitle": "新建组织",
+    "nameLabel": "组织名称",
+    "namePlaceholder": "输入您的团队/公司名称",
+    "creating": "正在创建...",
+    "created": "组织已成功创建",
+    "updated": "组织信息已更新",
+    "deleted": "组织已成功删除",
+    "failedLoad": "加载组织列表失败",
+    "failedCreate": "创建组织失败"
+  },
+  "members": {
+    "title": "成员管理",
+    "invite": "邀请成员",
+    "inviteTitle": "邀请新成员",
+    "emailLabel": "成员邮箱地址",
+    "emailPlaceholder": "colleague@example.com",
+    "roleLabel": "授予角色",
+    "roleMember": "普通成员",
+    "roleAdmin": "管理员",
+    "roleOwner": "所有者",
+    "sending": "发送中...",
+    "sendInvite": "发送邀请函",
+    "inviteSent": "邀请函已成功发送至 {email}",
+    "failedInvite": "发送邀请失败",
+    "roleUpdated": "成员角色已更新",
+    "failedRole": "修改角色失败",
+    "memberRemoved": "已成功移出成员",
+    "failedRemove": "移出成员失败",
+    "you": "(您)",
+    "joined": "已加入",
+    "pendingInvitations": "等待接受的邀请",
+    "pendingDescription": "尚未接受邀请的邮箱列表",
+    "revoke": "撤回邀请",
+    "revokeSuccess": "已成功撤回邀请",
+    "failedRevoke": "撤回邀请失败"
+  },
+  "knowledgeBases": {
+    "title": "知识库管理",
+    "description": "管理用于 AI 检索与问答的外部参考文档集合。",
+    "newKB": "新建知识库",
+    "createTitle": "创建知识库",
+    "nameLabel": "知识库名称",
+    "namePlaceholder": "例如: 产品设计文档",
+    "descriptionLabel": "知识库描述 (选填)",
+    "descriptionPlaceholder": "该知识库包含哪些方面的文档？",
+    "scopeLabel": "共享范围",
+    "scopePersonal": "仅限个人 — 只有您自己可见",
+    "scopeOrganization": "组织共享 — 组织内的所有成员均可访问",
+    "scopeApp": "全局共享 — 系统内的所有用户均可访问",
+    "active": "已启用",
+    "inactive": "已停用",
+    "created": "知识库创建成功",
+    "updated": "知识库更新成功",
+    "deleted": "知识库已成功删除",
+    "failedLoad": "加载知识库列表失败",
+    "failedCreate": "创建知识库失败"
+  },
+  "billing": {
+    "title": "计费与订阅",
+    "description": "管理 {org} 的商业订阅方案。",
+    "subscription": "账单与订阅",
+    "subscriptionDesc": "升级计划以增加团队席位并解锁更多高级功能。",
+    "subscriptionDescPaid": "管理您的商业订阅详情及发票记录。",
+    "seatsUsed": "已用席位",
+    "upgrade": "升级套餐",
+    "manageBilling": "管理账单",
+    "redirecting": "正在重定向中...",
+    "successMessage": "订阅计划更新成功！",
+    "tierFree": "免费版",
+    "tierSolo": "个人专业版",
+    "tierTeam": "团队协作版",
+    "tierBusiness": "企业商用版"
+  },
+  "invitations": {
+    "title": "团队邀请信",
+    "description": "您已被邀请加入此组织空间。",
+    "accept": "接受邀请并加入",
+    "accepting": "正在加入组织...",
+    "acceptSuccess": "已成功加入该组织！",
+    "redirecting": "正在前往您的组织控制台...",
+    "failedTitle": "接受邀请失败",
+    "failedDesc": "此邀请可能已过期或已被他人使用。",
+    "goDashboard": "返回控制台"
+  },
+  "footer": {
+    "copyright": "保留所有权利"
+  },
+  "landing": {
+    "heroTitle": "构建可信赖的",
+    "heroHighlight": "智能应用",
+    "heroTitleEnd": "",
+    "heroSubtitle": "一个生产级全栈开发模版，搭载 AI 智能对话、知识库检索 (RAG)、安全账户认证以及现代化的管理控制台。",
+    "getStarted": "立即体验",
+    "signIn": "登录账号",
+    "featureAiChat": "强劲的 AI 智能对话",
+    "featureAiChatDesc": "支持打字机流式输出、会话历史保存以及强大的 AI 工具调用 (Function Calling)。",
+    "featureRag": "检索增强生成 (RAG)",
+    "featureRagDesc": "基于您的私有文件进行向量搜索。支持导入 PDF、DOCX、MD 等多种文档格式。",
+    "featureAuth": "企业级安全认证",
+    "featureAuthDesc": "采用 JWT 访问与刷新令牌、集成 OAuth 登录、提供会话安全与多角色权限管理。",
+    "featureDashboard": "现代化管理面板",
+    "featureDashboardDesc": "系统健康指标实时监控、便捷的用户和对话管理、统计数据一览无余。",
+    "featureApi": "强大的 REST API",
+    "featureApiDesc": "自动生成 OpenAPI 说明文档的 FastAPI 后端，版本化路由管理，以及全异步数据库读写。",
+    "featureRealtime": "实时连接响应",
+    "featureRealtimeDesc": "通过 WebSocket 技术带来瞬间响应 of AI 输出和实时的前端数据状态同步。",
+    "techStackTitle": "采用业界前沿的技术栈构建",
+    "ctaTitle": "准备好开始了吗？",
+    "ctaSubtitle": "立即创建您的免费账户，体验智能开发平台的无限可能。",
+    "createAccount": "创建免费账户",
+    "exploreApi": "浏览 API 文档",
+    "footerDesc": "一站式全栈 AI 应用平台，助力企业低门槛落地大模型场景。",
+    "footerProduct": "产品功能",
+    "footerResources": "使用资源",
+    "apiDocs": "API 文档中心",
+    "learnMore": "了解详情",
+    "copyright": "版权所有。保留所有权利。"
+  },
+  "marketing": {
+    "nav": {
+      "features": "核心功能",
+      "howItWorks": "运作原理",
+      "pricing": "价格方案",
+      "faq": "常见问题",
+      "blog": "官方博客",
+      "changelog": "更新日志",
+      "about": "关于我们",
+      "contact": "联系我们",
+      "help": "帮助中心",
+      "community": "开发者社区",
+      "security": "安全说明",
+      "getStarted": "立即开始",
+      "signIn": "登录",
+      "platform": "平台特性",
+      "solutions": "解决方案",
+      "customers": "客户案例",
+      "resources": "资源"
+    },
+    "menu": {
+      "product": "Product",
+      "solutions": "Solutions",
+      "resources": "Resources",
+      "seePricing": "See pricing",
+      "talkToSales": "Talk to sales",
+      "items": {
+        "overview": {
+          "label": "Overview",
+          "desc": "The whole platform at a glance"
+        },
+        "howItWorks": {
+          "label": "How it works",
+          "desc": "From sign-up to first answer in minutes"
+        },
+        "insights": {
+          "label": "Insights",
+          "desc": "Track usage, answer quality and ROI"
+        },
+        "changelog": {
+          "label": "Changelog",
+          "desc": "New features, shipped every week"
+        },
+        "support": {
+          "label": "Customer support",
+          "desc": "Resolve tickets faster with grounded answers"
+        },
+        "sales": {
+          "label": "Sales teams",
+          "desc": "Surface the right deck, doc and number instantly"
+        },
+        "knowledge": {
+          "label": "Internal knowledge",
+          "desc": "One place to ask across every tool"
+        },
+        "research": {
+          "label": "Research & analysis",
+          "desc": "Summarize, compare and decide with citations"
+        },
+        "help": {
+          "desc": "Guides, tutorials and answers"
+        },
+        "api": {
+          "desc": "Build on our REST API"
+        },
+        "security": {
+          "desc": "How we keep your data safe"
+        },
+        "community": {
+          "desc": "Join the conversation"
+        },
+        "blog": {
+          "desc": "Product news and playbooks"
+        }
+      }
+    },
+    "footer": {
+      "tagline": "The AI assistant that knows your work.",
+      "product": "Product",
+      "company": "Company",
+      "resources": "Resources",
+      "helpCenter": "Help center",
+      "apiDocs": "API docs",
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "cookies": "Cookies",
+      "operational": "All systems operational"
+    },
+    "cookies": {
+      "title": "We use cookies",
+      "description": "Essential cookies keep you signed in. Optional ones help us understand how the product is used.",
+      "policyLink": "cookie policy",
+      "acceptAll": "Accept all",
+      "rejectOptional": "Reject optional",
+      "preferences": "Preferences",
+      "savePreferences": "Save preferences",
+      "back": "Back",
+      "essential": "Essential",
+      "essentialDesc": "Required to keep you signed in. Cannot be disabled.",
+      "analytics": "Analytics",
+      "analyticsDesc": "Aggregated, anonymized usage data.",
+      "functional": "Functional",
+      "functionalDesc": "Remembers preferences (theme, onboarding state)."
+    },
+    "common": {
+      "lastUpdated": "Last updated {date}",
+      "readPost": "Read post",
+      "read": "Read",
+      "backToBlog": "Back to blog",
+      "keepReading": "Keep reading",
+      "seeAlso": "See also",
+      "minRead": "{count} min read",
+      "needHelp": "Need a custom integration?",
+      "contactUs": "Contact us"
+    },
+    "legal": {
+      "eyebrow": "Legal",
+      "terms": {
+        "title": "Terms of Service",
+        "summary": "The legal agreement between you and {appName}. Plain language where we can; precise where we must."
+      },
+      "privacy": {
+        "title": "Privacy Policy",
+        "summary": "What we collect, why, and what you can do about it. We don't train on your data — ever."
+      },
+      "cookies": {
+        "title": "Cookie Policy",
+        "summary": "What we store in your browser, why, and how to opt out."
+      }
+    },
+    "about": {
+      "eyebrow": "About",
+      "title": "We build {appName} so other founders don't have to.",
+      "description": "The fastest way to ship a real AI SaaS — auth, billing, RAG, agents, the whole boring stack — without rewiring the same plumbing every time.",
+      "whyTitle": "Why this exists",
+      "why1": "Every AI side-project starts the same way: a beautiful idea, then four weeks of YAML, three decisions about session storage, and one regretful hand-rolled webhook handler.",
+      "why2": "We open-sourced the plumbing — and kept iterating on it across real production apps — so the next person shipping an AI product can start the day on the actual product.",
+      "byTheNumbers": "By the numbers",
+      "stat_apps": "Production apps shipped",
+      "stat_deploy": "Avg time to first deploy",
+      "stat_frameworks": "AI frameworks supported",
+      "stat_license": "License",
+      "valuesEyebrow": "What we believe",
+      "valuesTitle": "Principles, not tasteful platitudes.",
+      "values": [
+        {
+          "key": "shipBoring",
+          "title": "Ship the boring parts",
+          "description": "Auth, billing, observability — wired and tested so you can focus on what makes your product different."
+        },
+        {
+          "key": "defaults",
+          "title": "Defaults that age well",
+          "description": "We pick conventions that hold up at scale: typed APIs, repository-service split, async everywhere."
+        },
+        {
+          "key": "openOpinionated",
+          "title": "Open, but opinionated",
+          "description": "MIT-licensed source you can fork freely. Strong defaults so the path of least resistance is also the right one."
+        },
+        {
+          "key": "aiTool",
+          "title": "AI as a tool, not a goal",
+          "description": "RAG, agents, streaming — first-class but optional. Build calm products that happen to use AI well."
+        }
+      ],
+      "teamLabel": "Team",
+      "teamTitle": "Small team. Big surface area.",
+      "team": [
+        {
+          "initials": "F",
+          "role": "Founders",
+          "line": "Engineering · Product"
+        },
+        {
+          "initials": "OS",
+          "role": "Open source",
+          "line": "Community contributions"
+        },
+        {
+          "initials": "B",
+          "role": "Beta testers",
+          "line": "Early-access customers"
+        }
+      ],
+      "quoteLine1": "Build the product.",
+      "quoteLine2": "We'll handle",
+      "quoteLine3": "the boring part.",
+      "quoteByline": "manifesto",
+      "seePricing": "See pricing",
+      "ctaEyebrow": "Ready?",
+      "ctaTitle": "Try it — no card needed.",
+      "ctaPrimary": "Get started",
+      "ctaSecondary": "Talk to us"
+    },
+    "contact": {
+      "eyebrow": "Contact",
+      "title": "Talk to us.",
+      "description": "Sales, support, partnerships, or just to say hi — pick the channel that fits, we'll get back to you.",
+      "channels": "Channels",
+      "sendMessage": "Send us a message",
+      "office": "Office",
+      "officeNote": "Remote-first team. Working hours overlap roughly UTC 08:00–18:00.",
+      "channelsList": [
+        {
+          "key": "support",
+          "label": "Email support",
+          "description": "We reply within {sla} on weekdays."
+        },
+        {
+          "key": "help",
+          "label": "Help center",
+          "value": "FAQs and guides",
+          "description": "Most questions are answered there."
+        },
+        {
+          "key": "discord",
+          "label": "Community Discord",
+          "value": "Async chat with builders",
+          "description": "Fastest way to get unstuck."
+        },
+        {
+          "key": "github",
+          "label": "GitHub issues",
+          "value": "Bugs, feature requests",
+          "description": "Source code questions."
+        }
+      ],
+      "responseSla": "{sla} response SLA",
+      "formNote": "Form tries the backend /api/v1/contact endpoint first. If it's not implemented, it opens your mail client (mailto). Update contact info in",
+      "form": {
+        "name": "Name",
+        "email": "Email",
+        "topic": "Topic",
+        "topic_support": "Support",
+        "topic_sales": "Sales",
+        "topic_partnerships": "Partnerships",
+        "topic_press": "Press / other",
+        "message": "Message",
+        "messagePlaceholder": "Tell us a bit about what you're working on…",
+        "send": "Send message",
+        "sending": "Sending…",
+        "sentTitle": "Message sent",
+        "sentBody": "Thanks — we'll get back to you within 24 hours on weekdays.",
+        "fallbackOpened": "Email opened",
+        "fallbackBody": "Your mail client should be drafting a message. If nothing happened, email us directly.",
+        "errorRequired": "Please fill out name, email, and message.",
+        "errorEmail": "Please enter a valid email address.",
+        "policyHint": "We reply within 24 hours on weekdays. By sending this you agree to our",
+        "policy": "privacy policy"
+      }
+    },
+    "help": {
+      "eyebrow": "Help",
+      "title": "How can we help?",
+      "description": "Browse topics or jump straight to a question. Still stuck? Email support — we reply fast.",
+      "browseLabel": "Browse",
+      "topics": [
+        {
+          "id": "getting-started",
+          "iconKey": "key",
+          "title": "Getting started",
+          "description": "Sign up, first chat, connect your data."
+        },
+        {
+          "id": "chat",
+          "iconKey": "message",
+          "title": "Chat & agents",
+          "description": "Streaming, tool calls, switching models."
+        },
+        {
+          "id": "kb",
+          "iconKey": "book",
+          "title": "Knowledge bases",
+          "description": "Collections, sync sources, search."
+        },
+        {
+          "id": "billing",
+          "iconKey": "credit",
+          "title": "Billing",
+          "description": "Plans, credits, invoices, seats."
+        },
+        {
+          "id": "workspace",
+          "iconKey": "settings",
+          "title": "Workspace",
+          "description": "Members, invitations, API keys."
+        },
+        {
+          "id": "security",
+          "iconKey": "shield",
+          "title": "Security",
+          "description": "Auth, data retention, encryption."
+        }
+      ],
+      "faqGroups": [
+        {
+          "id": "getting-started",
+          "title": "Getting started",
+          "items": [
+            {
+              "q": "How do I create my first conversation?",
+              "a": "Sign in, click 'New chat' from the dashboard, then type a prompt. The agent will stream the response, including any tool calls it makes along the way."
+            },
+            {
+              "q": "Can I import data from Google Drive?",
+              "a": "Yes — under Knowledge bases, add a sync source for Google Drive. You'll authenticate via OAuth and pick a folder. Files re-sync on a schedule you choose."
+            },
+            {
+              "q": "Which AI model is used by default?",
+              "a": "We default to a sensible cost/quality balance per provider. You can switch models per-conversation from the model picker in the chat input."
+            }
+          ]
+        },
+        {
+          "id": "chat",
+          "title": "Chat & agents",
+          "items": [
+            {
+              "q": "Why does the assistant pause to ask for approval?",
+              "a": "Some tools (write actions, sending messages, web fetches) can be configured to require human approval. You'll see a confirmation panel inline — approve or reject and the agent resumes."
+            },
+            {
+              "q": "Can I regenerate a response?",
+              "a": "Hover the most recent assistant message and click the regenerate icon. The agent re-runs the last prompt with the same model and tools."
+            }
+          ]
+        },
+        {
+          "id": "kb",
+          "title": "Knowledge bases",
+          "items": [
+            {
+              "q": "What file formats are supported?",
+              "a": "PDF, DOCX, MD, TXT out of the box. With LlamaParse enabled, 130+ formats including PPT, XLSX, images and more."
+            },
+            {
+              "q": "How is search ranked?",
+              "a": "Cosine similarity over embeddings. Score thresholds and re-ranking can be configured per collection."
+            }
+          ]
+        },
+        {
+          "id": "billing",
+          "title": "Billing",
+          "items": [
+            {
+              "q": "Do unused credits roll over?",
+              "a": "Monthly subscription credits expire at the end of each billing cycle. Pay-as-you-go top-ups never expire."
+            },
+            {
+              "q": "How do seats work?",
+              "a": "Each plan includes a base seat count. Add seats from the billing portal — pro-rated and charged immediately."
+            }
+          ]
+        },
+        {
+          "id": "workspace",
+          "title": "Workspace",
+          "items": [
+            {
+              "q": "How do I invite teammates?",
+              "a": "From the dashboard, click 'Invite team'. Enter emails — they'll get a magic link to join your workspace."
+            },
+            {
+              "q": "Where do I generate an API key?",
+              "a": "Settings → API keys. Keys are revealed once on creation; store yours in a secret manager. Revoke anytime."
+            }
+          ]
+        },
+        {
+          "id": "security",
+          "title": "Security",
+          "items": [
+            {
+              "q": "How is my data encrypted?",
+              "a": "TLS in transit, AES-256 at rest. Database backups encrypted with KMS-managed keys. See the Security page for details."
+            },
+            {
+              "q": "Do you train on my data?",
+              "a": "No. Your prompts and uploaded documents are never used to train any model — ours or third-party."
+            }
+          ]
+        }
+      ],
+      "stillStuckEyebrow": "Still stuck?",
+      "stillStuckTitle": "Talk to a real person.",
+      "stillStuckBody": "Email is the fastest way to get unstuck. We reply within 24 hours on weekdays.",
+      "stillStuckCta": "Contact support"
+    },
+    "changelog": {
+      "eyebrow": "Changelog",
+      "title": "What's new",
+      "description": "Releases, improvements, and fixes shipping in {appName}."
+    },
+    "community": {
+      "eyebrow": "Community",
+      "title": "Builders ship faster together.",
+      "description": "A small, opinionated community of devs and founders shipping AI products on top of the template. Async, technical, low-noise.",
+      "channels": [
+        {
+          "key": "discord",
+          "title": "Discord",
+          "description": "Real-time async chat with other builders. Share what you're shipping, get unstuck.",
+          "cta": "Join the server",
+          "eyebrow": "Most active"
+        },
+        {
+          "key": "github",
+          "title": "GitHub",
+          "description": "Source code, issues, discussions. Star to bookmark, file an issue if you hit a bug.",
+          "cta": "View repository"
+        },
+        {
+          "key": "twitter",
+          "title": "Twitter / X",
+          "description": "Build-in-public updates, release notes, and the occasional technical thread.",
+          "cta": "Follow"
+        },
+        {
+          "key": "youtube",
+          "title": "Office hours",
+          "description": "Weekly office-hours stream — we walk through real builds and answer questions.",
+          "cta": "Watch on YouTube"
+        }
+      ],
+      "guidelinesTitle": "Guidelines",
+      "guidelinesIntro": "We keep the bar high but the rules short. Treat each other well, post in the right place, don't spam.",
+      "guidelines": [
+        {
+          "title": "Be helpful",
+          "description": "Answer questions when you can. Even pointing someone to the right doc page is meaningful."
+        },
+        {
+          "title": "Be specific",
+          "description": "Sharing what you tried beats sharing what you want. Logs, code, screenshots — concrete beats abstract."
+        },
+        {
+          "title": "Share wins",
+          "description": "Shipped something? Tell us. We boost cool launches in newsletter and on social."
+        },
+        {
+          "title": "No selling",
+          "description": "Don't DM-spam to pitch. Don't post your unrelated startup in the help channels. We mute, we don't ban — usually."
+        }
+      ]
+    },
+    "security": {
+      "eyebrow": "Security",
+      "title": "We treat your data like ours.",
+      "description": "Practical, no-nonsense security posture. We default to the boring choices, document what we do, and patch fast.",
+      "pillars": [
+        {
+          "iconKey": "lock",
+          "title": "Encryption everywhere",
+          "description": "TLS 1.2+ in transit, AES-256 at rest. Encrypted backups with KMS-managed keys, rotated quarterly."
+        },
+        {
+          "iconKey": "key",
+          "title": "Strong auth, by default",
+          "description": "Bcrypt password hashing, JWT access + refresh tokens, optional OAuth providers, API keys constant-time-compared."
+        },
+        {
+          "iconKey": "userCheck",
+          "title": "Least-privilege access",
+          "description": "Role-based access control inside the app, scoped database roles in production, audit-logged admin actions."
+        },
+        {
+          "iconKey": "database",
+          "title": "Tenant isolation",
+          "description": "Per-organization data partitioning. Cross-tenant queries are guarded at the repository layer, never trusted at the API."
+        },
+        {
+          "iconKey": "eye",
+          "title": "We don't train on your data",
+          "description": "Prompts, documents, and conversations are never used to train any model. Period."
+        },
+        {
+          "iconKey": "shield",
+          "title": "Vulnerability response",
+          "description": "Patches for CVEs in dependencies merged within 72 hours. Coordinated disclosure for issues reported by researchers."
+        }
+      ],
+      "checklistTitle": "What we do, plainly",
+      "checklist": [
+        "TLS 1.2+ on all traffic; HSTS preload",
+        "AES-256 encryption at rest for database and object storage",
+        "JWT short-lived access tokens (15 min) + httpOnly refresh tokens",
+        "API keys hashed in database; never logged or echoed",
+        "Per-org row-level scoping at the repository layer",
+        "Stripe handles all card data — we never see PAN/CVV",
+        "Daily automated backups, 30-day retention",
+        "Incident postmortems published for any user-facing incident"
+      ],
+      "vulnTitle": "Reporting a vulnerability",
+      "vulnBody": "Found something? We want to know. Email {email} with steps to reproduce. We'll acknowledge within 48 hours and credit researchers who follow coordinated disclosure.",
+      "vulnContactCta": "Contact us"
+    },
+    "blog": {
+      "eyebrow": "Blog",
+      "title": "Notes from the workshop.",
+      "description": "Engineering deep-dives, product decisions, and the occasional rant. Posts every couple of weeks, no marketing fluff.",
+      "featured": "Featured",
+      "noPostsTitle": "No posts yet",
+      "noPostsDesc": "Drop the first MDX into content/blog and rebuild — the index renders automatically.",
+      "endOfPost": "end of post"
+    },
+    "landing": {
+      "metaDescription": "An AI assistant that knows your team's work. Plug in your docs, your tools, and your data — get answers grounded in everything your team has ever shipped.",
+      "hero": {
+        "eyebrow": "Meet your team's AI co-worker",
+        "titlePre": "AI that",
+        "titleHighlight": "knows",
+        "titleEm": "your work.",
+        "description": "Plug in your docs, your tools, and your data. Ask anything — get answers grounded in everything your team has ever shipped.",
+        "ctaPrimary": "Start free",
+        "ctaSecondary": "Book a demo",
+        "stat_teams": "Teams using",
+        "stat_speed": "Faster answers",
+        "stat_uptime": "Always on",
+        "ratingLabel": "rated 4.9/5 by 1,200+ teams",
+        "trustNote": "No credit card required · Cancel anytime"
+      },
+      "social": {
+        "title": "Trusted by teams across industries"
+      },
+      "how": {
+        "eyebrow": "How it works",
+        "title": "Three steps to a smarter team"
+      },
+      "features": {
+        "eyebrow": "Features",
+        "title": "Built-in features that ship today",
+        "subtitle": "The boring infrastructure parts you'd otherwise spend a quarter wiring up."
+      },
+      "data": {
+        "eyebrow": "How retrieval works",
+        "title": "Your sources, ranked + cited"
+      },
+      "testimonials": {
+        "eyebrow": "Loved by teams",
+        "titlePre": "Teams that ship faster",
+        "titleEm": "with us."
+      },
+      "pricing": {
+        "eyebrow": "Pricing",
+        "titlePre": "Pay only for what",
+        "titleEm": "your team needs.",
+        "subtitle": "Drag the slider — your plan, your price, in real time.",
+        "teaser": {
+          "seats": "Team size",
+          "seatsUnit": "users",
+          "perMonth": "/mo",
+          "seeFull": "See full comparison →",
+          "custom": "Let's talk",
+          "billedMonthly": "billed monthly · cancel anytime",
+          "perSeatUnit": "/ user / month"
+        }
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Frequently asked.",
+        "items": [
+          {
+            "q": "What does {appName} actually do?",
+            "a": "It's an AI assistant that lives on top of your team's documents, conversations, and tools. Ask it questions in natural language; get answers grounded in your own data, with sources cited."
+          },
+          {
+            "q": "Where does my data live?",
+            "a": "Your data stays in your workspace. We never train on your content, and we encrypt everything at rest and in transit. Bring your own keys if you need extra control."
+          },
+          {
+            "q": "Which tools can I connect?",
+            "a": "Out of the box: Google Drive, Notion, Slack, GitHub, Confluence, and any S3-compatible bucket. More integrations ship every month, and you can always pipe data in via the public API."
+          },
+          {
+            "q": "Can I cancel anytime?",
+            "a": "Yes — every paid plan is month-to-month and you can cancel from the billing dashboard. Your account stays active until the end of the period you've already paid for."
+          },
+          {
+            "q": "Do you offer SSO and audit logs?",
+            "a": "SSO (Google, Okta, Microsoft Entra) and audit logs come with the Business plan. SCIM provisioning and DLP controls are available on Enterprise — get in touch."
+          },
+          {
+            "q": "Is there an API?",
+            "a": "Yes. Every feature in the dashboard is also available over a JSON API. Stream chat responses, ingest documents, manage users, subscribe to events — see the developer docs."
+          }
+        ]
+      },
+      "finalCta": {
+        "statValue": "12,840",
+        "statLabel": "Questions answered this week",
+        "titlePre": "Your team's next answer is",
+        "titleEm": "one ask away.",
+        "description": "Free 14-day trial. No credit card. Cancel anytime.",
+        "primary": "Start free",
+        "secondary": "See pricing"
+      }
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "Simple, transparent pricing",
+      "description": "Start free. Upgrade when you're ready — every plan includes a 14-day trial.",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "savePill": "−20%",
+      "startTrial": "Start free trial",
+      "mostPopular": "Most popular",
+      "demoBanner": "Showing template plans — connect Stripe to see your real catalog.",
+      "loved": "Loved by builders",
+      "lovedTitle": "Teams shipping with us",
+      "faqTitle": "Pricing questions, answered",
+      "perMonth": "/ month",
+      "perYear": "/ year",
+      "trialBadge": "{days}-day free trial",
+      "faqs": [
+        {
+          "q": "Can I change plans later?",
+          "a": "Yes — upgrade, downgrade, or cancel at any time from your billing portal. Changes pro-rate automatically."
+        },
+        {
+          "q": "Do unused credits roll over?",
+          "a": "Unused monthly credits expire at the end of each billing cycle. Top-up credit packs you purchase separately never expire."
+        },
+        {
+          "q": "What payment methods do you accept?",
+          "a": "All major credit and debit cards via Stripe, plus ACH and SEPA on annual plans. Enterprise can pay via invoice."
+        },
+        {
+          "q": "Is there a free trial?",
+          "a": "Yes. Every paid plan comes with a 14-day free trial — no credit card required to start."
+        },
+        {
+          "q": "Can I self-host?",
+          "a": "Yes. The template is open-source. Self-host on your own infra, or pay us to manage it."
+        },
+        {
+          "q": "Do you offer discounts for annual billing?",
+          "a": "Annual plans get 2 months free (~17% saving). Toggle the billing switch above to see annual pricing."
+        }
+      ]
+    }
+  }
+}

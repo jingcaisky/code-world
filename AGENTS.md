@@ -1,407 +1,452 @@
-# {{APP_NAME}} — Agent Guide
+# AGENTS.md
 
-Chat is the minimal chat-first agent-native app template. Keep chat as the
-primary surface, add actions for real capabilities, and add screens only when a
-workflow needs durable UI around the conversation.
+Working handbook for agents in `D:\MZmulti_agent`.
 
-## Core Rules
+## Project Snapshot
 
-- Never hardcode API keys, tokens, webhook URLs, signing secrets, private Builder/internal data, customer data, or credential-looking literals. Use secrets/OAuth/runtime configuration and obvious placeholders in examples.
-- Follow the root framework contract: data in SQL, actions first, application
-  state for navigation/selection, and shared agent chat for AI work.
-- Use actions for app operations and keep frontend/API parity.
-- Treat the chat as the default UI. When the user asks for a capability, prefer
-  adding or improving the action surface first, then add a page, table, form, or
-  widget only when the user needs to inspect, compare, approve, or share durable
-  objects.
-- If the user wants to plug in their own agent backend, keep the app shell and
-  thread UI intact and adapt the chat through the framework's `AgentChatRuntime`
-  connector helpers instead of forking the transcript/composer UI.
-- Keep the action surface small and orthogonal: every action is a tool in the
-  model's context window, so prefer one CRUD-style `update` (patch of fields)
-  over many per-field actions, reach for an existing generic query / escape
-  hatch (`provider-api-*`, dev `db-query`) before minting a new read action,
-  mark UI-only or programmatic actions `agentTool: false` to hide them from the
-  model (distinct from `toolCallable: false`, which only gates the extension
-  iframe), and delete or hide actions the UI no longer uses. See the `actions`
-  skill.
-- Keep database code provider-agnostic and additive.
-- Use `view-screen` or application state when the active page/selection is
-  unclear.
-- For new features, update UI, actions, skills/instructions, and application
-  state when applicable.
+`multi_agent` is a template-generated full-stack app with:
 
-## Application State
+- FastAPI + Pydantic v2 backend
+- PostgreSQL with async SQLAlchemy / asyncpg
+- JWT refresh tokens, API keys, and Google OAuth
+- Redis for cache, rate limiting, and Celery plumbing
+- LangGraph-based agent orchestration
+- RAG on PostgreSQL pgvector
+- Next.js 15 + React 19 frontend with i18n
+- Stripe billing, admin screens, file uploads, chat, and knowledge-base tools
 
-- `navigation` should describe the current view and selected entity ids. The
-  default chat view is `chat` at `/`.
-- `navigate` may be used to move the UI when the app supports it.
-- `view-screen` is the first tool to call when the user's visible context
-  matters.
+The repo is split into `backend/` and `frontend/`, with shared operational docs in the root and `docs/`.
 
-## Framework Docs Lookup
+## Source Of Truth
 
-- Before implementing or explaining non-trivial Agent Native behavior, use the
-  `agent-native-docs` skill and the built-in `docs-search` action/tool to read
-  the version-matched framework docs bundled with `@agent-native/core`.
-- Use the built-in `source-search` action/tool, or search
-  `node_modules/@agent-native/core/corpus`, when you need current core or
-  first-party template implementation examples.
-- Prefer those installed docs over memory or public docs when package APIs,
-  generated-app conventions, workspaces, actions, or agent surfaces are involved.
+When docs disagree, trust the code and config files first:
 
-## A2A Cross-App Delegation
+1. `backend/app/core/config.py`
+2. `backend/app/main.py`
+3. `backend/app/api/router.py`
+4. `backend/app/services/`
+5. `backend/app/repositories/`
+6. `frontend/src/`
+7. `backend/.env.example`
+8. `frontend/.env.example`
 
-This Chat app is the central hub. Other first-party apps are available over
-A2A/call-agent and launch-app:
+Use the docs as a map, but re-check the implementation before changing anything significant.
 
-| App ID | Name | When to delegate |
-|--------|------|-----------------|
-| mail | Mail | Email operations — use call-agent |
-| calendar | Calendar | Schedule and booking — use call-agent |
-| brain | Brain | Cited knowledge from Slack, meetings — use call-agent |
-| analytics | Analytics | Data source charts — use call-agent |
-| dispatch | Dispatch | Central Slack/Telegram router — use call-agent |
-| forms | Forms | Form builder — use call-agent |
-| assets | Assets | Digital asset manager — use call-agent (data) or launch-app (UI) |
-| macros | Macros | Automation — use call-agent |
-| design | Design | Visual HTML prototyping — use launch-app (full editor) |
-| slides | Slides | React presentations — use launch-app (full editor) |
-| content | Content | MDX document editing — use launch-app (full editor) |
-| videos | Videos | Remotion video editing — use launch-app |
-| plan | Plan | Structured visual plans — use call-agent or launch-app |
-| clips | Clips | Screen recording / meeting notes — use call-agent or launch-app |
+## Repository Map
 
-When the agent sees a request that belongs to another domain, it should
-proactively delegate using the tool that matches the task:
-- **Data/operations without UI** → \`call-agent\` (e.g., "send an email")
-- **Need visual editing** → \`launch-app\` (e.g., "design a landing page")
+### Backend
 
-## IDE Layout Contract
+`backend/app/` is organized as:
 
-This template is the primary shell for code-first IDE experiences. Keep the
-layout aligned with a professional editor workflow:
+- `api/routes/v1/` - HTTP endpoints
+- `api/deps.py` - dependency aliases and service factories
+- `core/` - config, security, middleware, cache, rate limiting, exceptions
+- `db/models/` - SQLAlchemy models
+- `repositories/` - pure data access, `flush()` only
+- `schemas/` - Pydantic request/response models
+- `services/` - business logic and orchestration
+- `agents/` - agent wrappers, prompts, tools
+- `services/rag/` - embeddings, retrieval, chunking, vector store, ingestion
+- `services/rag/connectors/` - pluggable sync connectors
+- `worker/` - Celery app and async background tasks
+- `commands/` - auto-discovered Click commands
 
-- left sidebar: Explorer, Git, and Search / Replace
-- bottom panel: Terminal, Problems, and Debug Console
-- right sidebar: Chat as the copilot surface, with Brain and Plan as
-  supporting AI panes
-- center area: Monaco editor as the main canvas, with tabs and split panes for
-  code, preview, or focused tools
-- top bar: menu actions, run/debug controls, and lightweight app switching
+### Frontend
 
-Brain should act as Chat's knowledge layer instead of a separate primary entry
-point. Plan can live in the right sidebar or a central tab when the task needs
-structured review. Design, Slides, Analytics, and Dispatch should remain
-modular and launch on demand, not as permanently dominant surfaces in the shell.
+`frontend/src/` is organized as:
 
-Do not reintroduce a global iframe/frame architecture unless a specific
-embedded tool needs route isolation or its own full editor lifecycle. Prefer
-direct embedded panes, tabs, or delegated A2A flows when possible.
+- `app/` - Next.js App Router, locale-prefixed routes, API route handlers
+- `components/` - UI, chat, billing, marketing, admin, onboarding, KB
+- `hooks/` - React hooks for chat, auth, orgs, billing, sources, websocket
+- `stores/` - Zustand stores
+- `lib/` - API clients, helpers, query keys, SEO, RAG helpers
+- `types/` - shared TypeScript types
+- `messages/` - translation catalogs (`zh`, `en`, `pl`)
 
-## Skills
+## Architecture Rules
 
-Read the relevant root skill before implementation: `adding-a-feature`,
-`actions`, `agent-native-docs`, `storing-data`, `real-time-sync`, `security`,
-`delegate-to-agent`, `frontend-design`, `shadcn-ui`, and
-`self-modifying-code`.
+### Layering
 
-## Code World Architecture (v2.0 — Hybrid Retrieval + RAG)
+The backend follows a strict route -> service -> repository flow:
 
-This app implements the **Code World multi-layer conversation architecture** with
-Pre-L0 hybrid search, RAG-enhanced triage, and Zvec semantic vector DB.
-Full spec: `docs/architecture-spec.md`
+- Routes validate input and call services.
+- Services contain business rules and raise domain exceptions.
+- Repositories perform database access only.
+- Models define persistence.
+- Schemas define create/update/read/list contracts.
 
-### Architecture Layers
+Do not put direct database access in routes.
 
-```
-User Input → Pre-L0: Hybrid Retrieval → L0: Context Assembly → L1: RAG Triage
-→ L2: Main Model Orchestration → L3: Sub-Agent Execution + Review
-→ L4: Integration + Memory → Output
-```
+### Repository Rules
 
-| Layer | Purpose | Key Files |
-|-------|---------|-----------|
-| **Pre-L0** | Keyword+semantic hybrid search → RAG context | `server/lib/hybrid-retriever.ts`, `server/lib/zvec-client.ts` |
-| **L0** | Token budget + context assembly (RAG-aware) | `server/lib/token-budget.ts`, `server/lib/context-assembler.ts` |
-| **L1** | Hybrid/MCP/Web parallel search + RAG-enhanced triage | `server/lib/search-orchestrator.ts`, `server/lib/triage-service.ts` |
-| **L2** | Main model plan generation + user confirmation | `server/lib/plan-engine.ts`, `server/plugins/plan-routes.ts` |
-| **L3** | Sub-agent parallel execution + review | `server/lib/sub-agent-runner.ts`, `server/lib/review-checker.ts` |
-| **L4** | Change report + memory + Zvec sync | `server/lib/change-reporter.ts`, `server/lib/memory-writer.ts` |
+- Use `db.flush()` and `db.refresh()` in repositories.
+- Do not call `commit()` inside repositories.
+- Keep repository methods small and keyword-oriented.
 
-### All Actions (30 tools)
+### Service Rules
 
-| Category | Actions |
-|----------|---------|
-| ✏️ Edit | `file-create`, `file-update`, `file-delete`, `file-batch-update`, `file-restore`, `mcp-file-read` |
-| 🔍 Search | `zvec-search`(hybrid), `web-search`, `grep-search`, `image-analyze` |
-| ⚡ Execute | `run-command`, `run-test`, `terminal`, `process-manage` |
-| ✅ Quality | `type-check`, `lint-fix`, `format-code`, `code-review` |
-| 🌿 Git | `git-ops`, `diff-preview` |
-| 📊 Insights | `code-insights` |
-| 📦 Project | `index-content`(dual-write), `env-ops`, `dependency-manage`, `sync-knowledge` |
-| 🧭 Nav | `view-screen`, `navigate`, `launch-app`, `hello` |
+- Raise `NotFoundError`, `AlreadyExistsError`, `BadRequestError`, etc. from services.
+- Treat services as the only layer that knows domain behavior.
+- Keep services thin when the domain is thin; split into subpackages when the domain grows.
 
-### Environment Variables
+### Schema Rules
+
+- Keep separate `Create`, `Update`, `Response`, and `List` schemas.
+- Use `from_attributes=True` for response schemas.
+- Updates should be nullable fields, not partial dicts.
+
+### Route Rules
+
+- Prefer `Annotated[...]` dependencies from `app/api/deps.py`.
+- Route handlers usually return `-> Any`; `response_model` owns serialization.
+- Keep routes thin and side-effect free beyond service calls.
+
+### Identity, Scope, and Permissions
+
+- Auth is JWT + refresh token + API key + Google OAuth.
+- Role model is `admin` / `user`.
+- Admin access is checked with `RoleChecker` and `CurrentAdmin`.
+- Conversations and chat files are user-scoped and protected against IDOR at the service layer.
+- RAG collections are global across users; search is broadly available, but collection management is admin-only.
+- Organization-level scoping exists in the app model; many resources are tied to `organization_id`.
+
+## Runtime Subsystems
+
+### Chat And Conversations
+
+- Chat is implemented with WebSocket streaming and message persistence.
+- Conversation features include create/list/update/archive/delete, shares, exports, and ratings.
+- Message ratings support like/dislike plus optional feedback.
+- Conversation shares are tokenized and exposed through dedicated routes.
+
+### File Uploads
+
+- Chat uploads go through validation, classification, parsing, storage, and DB tracking.
+- Supported types include images, PDF, DOCX, TXT, and MD.
+- Files are stored under `media/{user_id}/`.
+- Parsed text is attached when it is useful for the agent.
+
+### RAG
+
+- RAG uses PostgreSQL pgvector, not a separate vector DB service.
+- Ingestion can happen via CLI, API upload, or sync source.
+- Search is available to authenticated users; management is admin-only.
+- Sync sources are pluggable connector classes registered in `CONNECTOR_REGISTRY`.
+- The current tree has the connector base and registry, but no built-in connector modules are present in the package yet.
+
+### Billing
+
+- Stripe powers subscriptions, checkout, portal, invoices, events, and credits.
+- Billing return URLs are built from frontend settings in `app/core/config.py`.
+- Admin dashboards surface usage, plans, events, and subscription state.
+
+### Background Work
+
+- Celery is used for background tasks and scheduling.
+- Worker, beat, and flower are all wired through the CLI and Make targets.
+- In-process background handling exists for fallback paths.
+
+## Development Commands
+
+### Backend
 
 ```bash
-# Search
-AGENT_NATIVE_ZVEC_ENDPOINT="http://localhost:9090/api/search"
-AGENT_NATIVE_ZVEC_API_KEY=""                  # (optional)
-AGENT_NATIVE_WEB_SEARCH_PROVIDER="tavily"    # tavily | serpapi | bing
-AGENT_NATIVE_TAVILY_API_KEY=""              # Required for web search
-AGENT_NATIVE_SERPAPI_KEY=""                  # Fallback web search provider
-
-# Triage
-AGENT_NATIVE_GEMINI_API_KEY=""              # Required for Gemini Flash triage
-
-# Zvec (Remote vector database for semantic search)
-AGENT_NATIVE_ZVEC_ENDPOINT=""               # http://localhost:9090/api
-AGENT_NATIVE_ZVEC_API_KEY=""                # (optional)
-AGENT_NATIVE_ZVEC_MODEL="bge-large-zh-v1.5" # Embedding model
-
-# Hybrid Search
-AGENT_NATIVE_HYBRID_SEARCH_TIMEOUT="1500"   # ms timeout for hybrid search
-AGENT_NATIVE_RAG_CONTEXT_BUDGET="2000"      # Max tokens for RAG injection
-
-# Debug
-AGENT_NATIVE_DEBUG_CONTEXT="0"              # Set to "1" to log token budgets
-AGENT_NATIVE_REINDEX="false"               # Set to "true" to force re-index
+cd backend
+uv run uvicorn app.main:app --reload
+uv run pytest
+uv run pytest tests/api/test_health.py -v
+uv run ruff check . --fix
+uv run ruff format .
+uv run alembic upgrade head
+uv run alembic revision --autogenerate -m "Description"
+uv run multi_agent server run --reload
+uv run multi_agent db upgrade
+uv run multi_agent cmd rag-sources
+uv run multi_agent cmd rag-ingest /path/to/file.pdf --collection docs
+uv run multi_agent cmd rag-search "query" --collection docs
 ```
 
-### Sub-Agent Registry
+### Frontend
 
-| Agent | Scope | Description |
-|-------|-------|-------------|
-| `frontend-designer` | frontend | React components with shadcn/ui + Tailwind CSS |
-| `backend-creator` | backend | Actions with defineAction + SQL schemas |
-| `test-writer` | fullstack | vitest + testing-library test files |
-| `code-reviewer` | fullstack | TS analysis + CodeGraph dependency validation |
-
-### File Map (Code World Architecture)
-
-```
-server/lib/
-├── token-budget.ts           # P0: Token budget manager (allocation/truncation)
-├── context-assembler.ts      # P0: Context block assembly + Pre-L0 hybrid search (L0)
-├── embedder.ts               # P1: TF-IDF + Zvec semantic embedding (dual)
-├── vector-store.ts           # P1: SQLite-backed vector search (keyword)
-├── zvec-client.ts            # P1: Zvec vector DB client (semantic)
-├── hybrid-retriever.ts       # P1: Keyword + Semantic + RRF fusion (Pre-L0) ⭐
-├── content-indexer.ts        # P1: Dual-write indexing (local + Zvec)
-├── search-orchestrator.ts    # P1: Hybrid + MCP + Web parallel search (L1)
-├── triage-service.ts         # P1: RAG-enhanced Gemini Flash classification (L1)
-├── progress-emitter.ts       # P2: SSE streaming progress events
-├── plan-engine.ts            # P2: Main model orchestration + plan generation (L2)
-├── sub-agent-runner.ts       # P3: Dependency-scheduled sub-agent execution (L3)
-├── review-checker.ts         # P3: Type/security/style/CodeGraph review (L3)
-├── change-reporter.ts        # P4: File change report + commit message (L4)
-├── memory-writer.ts          # P4: OM compaction + learnings + CodeGraph (L4)
-├── knowledge-sync.ts         # SYS: AGENTS.md↔SQL + Vector index sync
-└── knowledge-sync-zvec.ts    # SYS: SQL → Zvec semantic sync ⭐
-
-server/plugins/
-├── plan-routes.ts            # P2: Plan confirm/stream/status API routes
-└── knowledge-sync.ts         # SYS: Startup knowledge sync hook
-
-actions/
-├── zvec-search.ts            # P0+P1: Hybrid search (keyword + semantic + RRF) ⭐
-├── web-search.ts             # P0: Web search (Tavily/SerpAPI)
-├── mcp-file-read.ts          # P0: Precise file content retrieval
-├── index-content.ts          # P1: Content indexing pipeline (dual-write)
-├── sync-knowledge.ts         # SYS: Manual knowledge sync trigger
-└── code-review.ts            # P3: Comprehensive code review pipeline
+```bash
+cd frontend
+bun install
+bun dev
+bun run build
+bun run lint
+bun run type-check
+bun test
+bun test:e2e
 ```
 
-### Implementation Status
+### Make Targets
 
-| Phase | Files | Status |
-|-------|-------|--------|
-| **P0** | token-budget, context-assembler, 3 search actions, config | ✅ Done |
-| **P1** | search-orchestrator, triage-service, embedder, vector-store, content-indexer, index-content | ✅ Done |
-| **P2** | plan-engine, plan-routes, progress-emitter | ✅ Done |
-| **P3** | sub-agent-runner, review-checker, code-review | ✅ Done |
-| **P4** | change-reporter, memory-writer | ✅ Done |
+Common targets in the root `Makefile` include:
 
-### Integration Status
+- `make dev`, `make bootstrap`, `make seed`, `make dev-down`, `make dev-logs`, `make dev-rebuild`
+- `make dev-frontend`
+- `make stage`, `make stage-down`
+- `make prod`, `make prod-down`, `make prod-logs`
+- `make test`, `make test-cov`, `make lint`, `make format`
+- `make db-init`, `make db-migrate`, `make db-upgrade`, `make db-downgrade`, `make db-current`, `make db-history`
+- `make run`, `make run-prod`, `make routes`
+- `make create-admin`, `make user-create`, `make user-list`
+- `make celery-worker`, `make celery-beat`, `make celery-flower`
+- `make docker-*` targets for lower-level container workflows
 
-| 组件 | 状态 | 说明 |
-|------|------|------|
-| 向量数据库 | ✅ | SQLite + TF-IDF，零外部依赖 |
-| Zvec-search | ✅ | 默认本地向量库，可选远程 Zvec API |
-| 内容索引 | ✅ | `index-content` Action 可索引整个项目 |
-| Web 搜索 | 🟡 | 需要 TAVILY_API_KEY |
-| Gemini 分流 | 🟡 | 需要 GEMINI_API_KEY，有关键词降级 |
-| 审查管道 | 🟡 | security 检查已实现，oxlint 调用待接入 |
-| Agent-chat 集成 | ✅ | systemPrompt + tools 全部注册到 agent-chat 插件 |
-| Zvec 向量数据库 | ✅ | zvec-client + knowledge-sync-zvec (AGENTS.md/Learnings/Code → Zvec) |
-| Hybrid 混合检索 | ✅ | hybrid-retriever (keyword TF-IDF + Zvec semantic + RRF fusion) |
-| RAG 检索增强 | ✅ | Pre-L0 search → context-assembler → triage RAG-enhanced prompt |
+## Project CLI
 
-### About MCP (Model Context Protocol)
+The backend package exposes `multi_agent` from `backend/cli/commands.py`.
 
-The `@agent-native/core` framework has built-in MCP support (`packages/core/src/mcp/`, 29 files).
-It provides endpoints at `/_agent-native/mcp` for external MCP clients. However:
+Top-level command groups:
 
-- **Our 29 Actions are NOT MCP tools** — they are Agent Tools, called via function calling
-  inside Chat conversations. They use HTTP endpoints at `/_agent-native/actions/:name`.
-- **MCP tools** are a different protocol, used by external IDEs (Claude Desktop, Cursor).
-  The framework provides built-in MCP tools via `builtin-tools.ts` for resource management.
-- **No additional MCP registration is needed** for our Actions to work within Chat.
+- `server`
+- `db`
+- `user`
+- `celery`
+- `cmd`
 
-| Concept | Protocol | Used By | Endpoint |
-|---------|----------|---------|----------|
-| Agent Tool (Action) | Function Calling | Chat Agent | `/_agent-native/actions/:name` |
-| MCP Tool | MCP Protocol | External IDEs | `/_agent-native/mcp` |
+The `cmd` group auto-discovers commands from `backend/app/commands/`.
 
-### SQL Database (4 tables)
+RAG-oriented commands currently documented in the codebase include:
 
-All data is stored in SQLite (local dev) or Postgres (deploy). Four core tables:
+- `rag-collections`
+- `rag-stats`
+- `rag-drop`
+- `rag-sources`
+- `rag-source-add`
+- `rag-source-remove`
+- `rag-source-sync`
+- `rag-ingest`
+- `rag-search`
 
-| Table | Purpose | Persistence |
-|-------|---------|-------------|
-| `chat_threads` | Full conversation history + messages (JSON blob) | Per-user, cross-session |
-| `observational_memory` | Long conversation compaction (Observer + Reflector) | Per-user, per-thread |
-| `resources` | AGENTS.md + Learnings (markdown memory files) | Per-user, global |
-| `vector_index` | TF-IDF weighted token vectors for keyword search | Global, per-project |
+## Configuration
 
-SQL is the single source of truth for app state, auth, settings, and memory.
-No data is lost on browser refresh or server restart.
+### Backend Settings
 
-### Vector Database (Zvec + Hybrid Retrieval) ⭐
+`backend/app/core/config.py` is the authoritative settings source. It reads `.env` from the current or parent directory.
 
-**Hybrid Retrieval Architecture** — keyword + semantic dual-channel search:
+Important groups:
+
+- Project and runtime: `PROJECT_NAME`, `API_V1_STR`, `DEBUG`, `ENVIRONMENT`, `TIMEZONE`
+- Security: `SECRET_KEY`, `API_KEY`, `API_KEY_HEADER`, token TTLs
+- Database: `POSTGRES_*`, computed `DATABASE_URL` and `DATABASE_URL_SYNC`
+- Redis and Celery: `REDIS_*`, `CELERY_*`
+- AI and agenting: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, `OPENROUTER_API_KEY`, `AI_MODEL`, `AI_TEMPERATURE`
+- RAG: `EMBEDDING_MODEL`, `RAG_CHUNK_SIZE`, `RAG_CHUNK_OVERLAP`, `RAG_CHUNKING_STRATEGY`, `RAG_DEFAULT_COLLECTION`, `RAG_TOP_K`, `RAG_HYBRID_SEARCH`, `RAG_ENABLE_OCR`
+- Billing: `STRIPE_*`, `BILLING_*`, `CREDITS_*`
+- Email: `EMAIL_*`
+- CORS: `CORS_ORIGINS`, `CORS_ALLOW_*`
+
+Note: some older docs mention alternate Google OAuth variable names, but the code currently uses `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+
+### Frontend Settings
+
+Frontend environment variables live in `frontend/.env.local`:
+
+- `BACKEND_URL`
+- `BACKEND_WS_URL`
+- `NEXT_PUBLIC_AUTH_ENABLED`
+- `NEXT_PUBLIC_API_URL`
+- `NEXT_PUBLIC_RAG_ENABLED`
+
+## Testing
+
+- Backend tests live under `backend/tests/`.
+- Test fixtures in `backend/tests/conftest.py` mock the DB session by default, so most tests do not need a live Postgres instance.
+- Coverage is configured to fail under 100 percent for backend code.
+- Frontend unit tests use Vitest.
+- Frontend E2E tests use Playwright.
+
+When changing behavior, update tests close to the affected layer:
+
+- route changes -> API tests
+- business rules -> service tests
+- query behavior -> repository tests
+- UI/state changes -> frontend unit or E2E tests
+
+## Deployment And Operations
+
+- Local backend docs are available only in `local`, `staging`, and `development` environments.
+- `backend/app/main.py` starts Redis, warms the embedding service, and initializes the pgvector store during lifespan startup when possible.
+- Admin UI is enabled in non-production environments.
+- Docker Compose files exist for dev, frontend, and production workflows.
+- Nginx in `nginx/` proxies frontend, API, and WebSocket traffic.
+
+## Documentation Index
+
+### Root Docs
+
+- `README.md` - project overview, stack, quickstart, Docker, deployment
+- `CLAUDE.md` - agent-oriented architecture and conventions
+- `CONTRIBUTING.md` - setup, style, testing, PR checklist
+- `ENV_VARS.md` - exhaustive environment variable reference
+- `MANUAL_STEPS.md` - one-time external setup checklist
+- `SECURITY.md` - auth model, hardening, and known limitations
+
+### Backend And Platform Docs
+
+- `docs/architecture.md` - layered architecture, auth, file flow, RAG flow
+- `docs/adding_features.md` - end-to-end feature, CLI, and migration patterns
+- `docs/commands.md` - Makefile and `multi_agent` CLI reference
+- `docs/configuration.md` - settings reference and production checklist
+- `docs/deploy.md` - deployment recipes and post-deploy checks
+- `docs/file-processing.md` - chat upload and RAG ingestion pipeline
+- `docs/patterns.md` - dependency injection, services, repositories, connectors, frontend patterns
+- `docs/permissions.md` - access matrix, RBAC, IDOR, API keys
+- `docs/testing.md` - backend/frontend testing and fixtures
+
+### How-To Guides
+
+- `docs/howto/add-api-endpoint.md` - new REST endpoint walkthrough
+- `docs/howto/add-agent-tool.md` - add a LangChain tool
+- `docs/howto/add-background-task.md` - add a Celery task
+- `docs/howto/add-rag-source.md` - add a new RAG document source
+- `docs/howto/add-sync-connector.md` - add a sync connector and register it
+- `docs/howto/configure-sync-sources.md` - manage sync sources, schedules, and modes
+- `docs/howto/customize-agent-prompt.md` - tune system prompts
+- `docs/howto/use-ratings.md` - message ratings and admin analytics
+
+### Frontend Docs
+
+- `frontend/README.md` - frontend setup, env vars, scripts, and deployment
+
+## Internationalization (i18n)
+
+### Language Support
+
+Frontend uses **`next-intl`** v3.25.3 with `localePrefix: "as-needed"` (default language has no URL prefix).
+
+| Language | Code | Default | Status |
+|----------|:----:|:-------:|:------:|
+| **中文 (简体)** | `zh` | **是** | ✅ 完整翻译 (~1018 条键值) |
+| English | `en` | 否 | ✅ 完整翻译 |
+| Polski | `pl` | 否 | ✅ 完整翻译 |
+
+### Key Files
+
+- `frontend/src/i18n.ts` — locale list, default locale, labels, flags
+- `frontend/src/middleware.ts` — `next-intl` middleware config
+- `frontend/messages/zh.json` — 完整中文翻译文件
+- `frontend/messages/en.json` — 英文翻译文件
+- `frontend/messages/pl.json` — 波兰语翻译文件
+- `frontend/src/lib/seo.ts` — SEO 元数据含 OG locale 映射 (`zh_CN`, `en_US`, `pl_PL`)
+- `frontend/src/components/language-switcher.tsx` — 语言切换组件（三种变体）
+
+### Adding a New Language
+
+1. 在 `frontend/src/i18n.ts` 的 `locales` 数组中添加新语言代码
+2. 在 `getLocaleLabel` 和 `getLocaleFlag` 中添加标签和国旗
+3. 在 `frontend/src/lib/seo.ts` 的 `OG_LOCALE` 中添加映射
+4. 创建 `frontend/messages/{code}.json`（参考 `en.json` 的结构）
+5. 语言切换器组件会自动适配
+
+## Frontend Pages
+
+前端共 **55 个页面文件** (`page.tsx`)，用户实际可用的有效页面 **52 个**，所有页面支持 3 种语言。
+
+### 分类统计
+
+| 分类 | 数量 | 访问权限 |
+|------|:----:|----------|
+| 公开营销页面 | 16 | 无需登录 |
+| 认证页面 | 7 | 未登录用户 |
+| 用户工作台 | 23 | 需登录 |
+| 管理后台 | 6 | 管理员 |
+| **合计** | **52** | — |
+
+### 公开页面（16 个）
+
+`/`(首页), `/pricing`, `/about`, `/blog`, `/blog/[slug]`, `/changelog`, `/help`, `/contact`, `/community`, `/security`, `/demo`, `/demo/[id]`, `/legal/terms`, `/legal/privacy`, `/legal/cookies`, `/shared/[token]`
+
+### 认证页面（7 个）
+
+`/login`, `/register`, `/forgot-password`, `/reset-password`, `/magic-link-sent`, `/auth/magic-link`, `/auth/callback`
+
+### 用户工作台（23 个）
+
+`/dashboard`, `/chat`, `/kb`, `/kb/[id]`, `/rag`, `/orgs`, `/orgs/[id]/members`, `/orgs/[id]/integrations`, `/billing`, `/billing/usage`, `/billing/credits`, `/billing/invoices`, `/billing/payment-methods`, `/billing/subscription`, `/settings/profile`, `/settings/account`, `/settings/appearance`, `/settings/notifications`, `/settings/slash-commands`, `/settings/providers`, `/invitations/[token]`, `/onboarding`, `/onboarding/[step]`
+
+### 管理后台（6 个）
+
+`/admin`, `/admin/users`, `/admin/conversations`, `/admin/ratings`, `/admin/stripe-events`, `/admin/system`
+
+### 特殊/内部页面
+
+`/profile` → 重定向到 `/settings/profile`；`/settings` → 重定向到 `/settings/profile`；`/dev/components` → 开发沙盒
+
+### Settings 子页面
+
+| 页面 | 功能说明 |
+|------|----------|
+| `/settings/profile` | 个人资料（姓名、头像） |
+| `/settings/account` | 账户安全（密码、会话管理） |
+| `/settings/slash-commands` | 斜杠命令管理（内置/自定义） |
+| `/settings/notifications` | 通知偏好（邮件/应用内） |
+| `/settings/appearance` | 外观主题（亮色/暗色） |
+| `/settings/providers` | **AI 提供商配置**（详见下方） |
+
+### AI Provider Configuration (`/settings/providers`)
+
+**预置提供商**（带官方 API URL）：
+- **Google Gemini** — `https://generativelanguage.googleapis.com/v1beta`
+- **GitHub Models** — `https://models.inference.ai.azure.com`
+- **NVIDIA NIM** — `https://integrate.api.nvidia.com/v1`
+- **ModelScope** — `https://api.modelscope.cn/v1`
+- **Cohere** — `https://api.cohere.ai/v1`
+- **Agnes AI** — `https://api.agnesai.com/v1`
+
+**自定义提供商**：用户可自行添加名称和 URL
+
+**存储方式**：通过后端 API 持久化到 PostgreSQL（`user_providers` 表），前端通过 Next.js API 路由代理：
+- 前端 API 客户端：`frontend/src/lib/providers-api.ts`
+- Next.js 代理路由：`/api/me/providers` → 后端 `/api/v1/me/providers`
+- 后端 API 路由：`backend/app/api/routes/v1/me_providers.py`
+- 后端 Service：`backend/app/services/user_provider.py`
+- 后端 Repository：`backend/app/repositories/user_provider.py`
+- 后端 Model：`backend/app/db/models/user_provider.py`
+
+**UI 风格**：与 `/settings/notifications` 一致的 `SectionCard` 卡片布局，API Key 支持显示/隐藏切换。
+
+### 测试报告 — Provider 功能
+
+**运行命令**：`uv run pytest tests/test_services_user_provider.py tests/api/test_providers.py -v`
 
 ```
-Input Query
-  │
-  ├─ Keyword Channel (TF-IDF)
-  │    └─ vector-store.ts → cosine similarity → ranked list A
-  │
-  └─ Semantic Channel (Zvec) [if configured]
-       └─ zvec-client.ts → embedding API → ranked list B
-  │
-  ▼
-RRF Fusion (Reciprocal Rank Fusion)
-  → combined ranked list with weights tuned by query type
-  → code queries favor keyword (0.7) · NL queries favor semantic (0.6)
+tests/test_services_user_provider.py ........ [ 50%]
+tests/api/test_providers.py .............   [100%]
+======================= 16 passed in 0.37s =======================
 ```
 
-**Dual-write indexing**:
+| 测试文件 | 测试用例 | 覆盖内容 |
+|----------|:--------:|----------|
+| `test_services_user_provider.py` | 8 | 当空时自动播种预设、返回已有数据、创建自定义成功、创建重复名称失败、更新成功、更新不存在报 404、删除自定义成功、删除预设报错 |
+| `tests/api/test_providers.py` | 8 | GET 列表、POST 创建、创建重复 409、PATCH 更新、更新不存 404、DELETE 自定义、DELETE 预设 400、未认证 401 |
 
-```
-index-content
-  ├─ Local:   chunk → TF-IDF embed → vector_index (SQLite)
-  └─ Remote:  chunk → Zvec upsert   → Zvec vector DB (if configured)
-```
+### 认证机制
 
-| Component | File | Description |
-|-----------|------|-------------|
-| Zvec Client | `server/lib/zvec-client.ts` | CRUD + semantic embed + search API |
-| Hybrid Retriever | `server/lib/hybrid-retriever.ts` | Keyword + Semantic + RRF fusion (Pre-L0) |
-| Vector Store | `server/lib/vector-store.ts` | SQLite CRUD + cosine similarity |
-| Embedder | `server/lib/embedder.ts` | TF-IDF + Zvec semantic embedding |
-| Content Indexer | `server/lib/content-indexer.ts` | Dual-write pipeline (local + Zvec) |
-| Zvec Knowledge Sync | `server/lib/knowledge-sync-zvec.ts` | AGENTS.md/Learnings/Code → Zvec auto-sync |
-| Search Action | `actions/zvec-search.ts` | Hybrid search (keyword + semantic + RRF) |
+- `(dashboard)/layout.tsx` 使用 `<AuthGuard>` 包裹所有子页面
+- 公开页面直接位于 `[locale]/` 下，无 AuthGuard
+- 管理后台权限在 API 层校验
+- 页面总路由数：52 页面 × 3 语言 = 156 条 + 84 条 API 路由 (`route.ts`)
 
-**Upgrade path**: swap `zvec-client.ts` / `embedder.ts` to use pgvector / Qdrant / Pinecone — interface stays the same.
+## Current Caveats
 
-### Knowledge Sync (Auto Startup — 3-way sync)
+- **Port Conflict & Migration**: The default backend port has been migrated to `8001` (from `8000`) to avoid conflicts with system processes like `Manager.exe`.
+- **Database Model Registration**: All core database models (including billing/stripe/items/user_providers) **must be imported** in [backend/app/db/models/__init__.py](file:///d:/MZmulti_agent/backend/app/db/models/__init__.py) to ensure they register on the SQLAlchemy metadata, preventing Alembic autogenerate from trying to drop them.
+- **Alembic Migrations**: The `user_providers` table database migration has been fully generated and applied (Revision `bf9bb610e20b`, in [backend/alembic/versions/2026-07-09_add_user_providers.py](file:///d:/MZmulti_agent/backend/alembic/versions/2026-07-09_add_user_providers.py)).
+- **Startup Script (start.bat)**: The root [start.bat](file:///d:/MZmulti_agent/start.bat) is configured to automatically pull up Docker backend dependencies, run local database migrations, seed the default admin account, boot the Next.js frontend locally via `bun dev` (in a separate window), and automatically launch the default browser to [http://localhost:3000](http://localhost:3000).
+- `backend/app/services/rag/connectors/__init__.py` only defines the base class and registry; connector modules still need to be added and registered for concrete source types.
+- Some docs mention older naming or legacy examples. Prefer the code and settings module when they conflict.
+- The frontend is locale-prefixed (`localePrefix: "as-needed"`) and ships with Chinese (default), English, and Polish catalogs.
+- The AI Provider Configuration page (`/settings/providers`) uses the backend API (`/api/v1/me/providers`) for data persistence. API keys are stored in the database (plain text; production should encrypt at rest). Frontend proxies through Next.js API routes (`/api/me/providers`, `/api/me/providers/[id]`).
+- The repo contains rich admin, billing, chat, and knowledge-base surfaces, so changes often need cross-cutting updates in backend, frontend, and docs.
 
-At server startup, knowledge sync automatically synchronizes ALL stores:
+## Editing Guidance
 
-1. **AGENTS.md → SQL Resources** — Agent reads/updates via `resources` tool
-2. **Project files → Local Vector Index** — TF-IDF keyword search
-3. **All above → Zvec Vector DB** — Semantic embedding search (if configured)
+- Keep changes tightly scoped.
+- Follow the existing layered architecture.
+- Prefer existing patterns over new abstractions.
+- Update the matching docs when behavior or configuration changes.
+- Avoid touching unrelated files.
 
-| Trigger | What happens |
-|---------|-------------|
-| Server startup | Auto-sync all 3 layers (fire-and-forget) |
-| `sync-knowledge` action | Manual sync + Zvec reindex |
-| Agent updates AGENTS.md/Learnings | Agent calls `sync-knowledge` |
-| `AGENT_NATIVE_REINDEX=true` | Force full re-index (local + Zvec) |
-
-```
-Server Ready
-  │
-  ├─ knowledge-sync.ts (Nitro plugin: hook "ready")
-  │   ├─ syncAgentsMd()     → SQL Resources ("AGENTS.md")
-  │   ├─ syncVectorIndex()  → vector_index table (keyword)
-  │   ├─ countLearnings()   → log stats
-  │   └─ syncAllToZvec()    → Zvec vector DB (semantic) [if configured]
-  │       ├─ AGENTS.md sections → Zvec documents
-  │       ├─ Learnings entries  → Zvec documents
-  │       └─ Code file chunks   → Zvec documents
-  │
-  └─ Agent can now:
-      • zvec-search → hybrid search (keyword + semantic fusion)
-      • resources   → read/write AGENTS.md + learnings
-      • sync-knowledge → propagate changes to all stores
-```
-
-### Context Assembly (per turn, RAG-Enhanced)
-
-```
-Every user message:
-  Pre-L0: hybridSearch() → keyword + semantic RRF fusion → RAG context
-  ↓
-  1. Hybrid Search Context (Pre-L0)              → relevant code/docs (RAG)
-  2. Thread Messages (SQL: chat_threads)         → recent 12 messages
-  3. Observational Memory (SQL: observational_memory) → compressed summary
-  4. Learnings (SQL: resources memory/MEMORY.md) → user prefs
-  5. AGENTS.md (SQL: resources AGENTS.md)        → project rules
-  6. Skills Registry (local: .agents/skills/)    → skill manifest
-  7. System Prompt (code: agent-chat.ts)         → framework rules
-  ↓
-  Token Budget (8K max, priority truncation)
-  ↓
-  Assembled context_block → injected into prompt
-  → triageService with RAG context (preSearchContext)
-  → main model with enriched context
-```
-
----
-
-## Final Conclusions (2026-07-03 · v2.0 Final)
-
-### What We Built
-
-A complete **5-layer + Pre-L0** intelligent coding assistant architecture with
-**30 tools**, **6 advanced AI capabilities**, and **5 system services** —
-all integrated into a single Agent-Native chat app.
-
-### Key Design Decisions
-
-| Decision | Reason |
-|----------|--------|
-| **Pre-L0 hybrid retrieval** | Keyword + semantic search runs BEFORE context assembly so RAG results enrich the prompt from the start |
-| **TF-IDF + Zvec dual channel** | TF-IDF for exact code symbol matches, Zvec for semantic understanding; RRF fusion combines both |
-| **Gemini Flash L1 triage** | Fast/cheap model separates simple queries from complex tasks, saving main model tokens |
-| **User plan confirmation** | Main model generates plan → user confirms → execution begins. No blind code changes. |
-| **Review grading (critical/warning/suggest)** | Only critical errors block the pipeline; warnings auto-fix and continue |
-| **3-way knowledge sync** | AGENTS.md → SQL Resources · Code → vector_index · All → Zvec (on startup) |
-| **30 Actions = Agent Tools, NOT MCP** | Our tools use function calling inside Chat, no extra MCP registration needed |
-
-### What Needs Configuration to Work
-
-| Feature | Requirement | Fallback |
-|---------|------------|----------|
-| Zvec semantic search | `AGENT_NATIVE_ZVEC_ENDPOINT` | TF-IDF keyword only (built-in) |
-| Web search | `TAVILY_API_KEY` | Not available |
-| Gemini Flash triage | `GEMINI_API_KEY` | Keyword-based triage (built-in) |
-| Full code review | `oxlint` binary in PATH | TypeScript type-check only |
-
-### Self-Contained (Zero Config Required)
-
-- Hybrid keyword search (TF-IDF) — always works
-- File CRUD (create/update/delete/read/batch/restore)
-- Code execution (run-command/run-test/terminal)
-- Type checking + code formatting
-- Git operations + diff preview
-- Context compression + Observational Memory
-- Learnings (user preferences persistence)
-- AGENTS.md auto-sync to SQL Resources
-- Error auto-retry
-- CoT reasoning trace + tool call cards + sub-agent progress (frontend)
-- Token budget management

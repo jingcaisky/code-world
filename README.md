@@ -118,23 +118,6 @@ bun install
 bun dev
 ```
 
-### 访问地址
-
-| 服务 | 地址 |
-|------|------|
-| **前端界面** | http://localhost:3000 |
-| **后端 API** | http://localhost:8000 |
-| **API 文档 (Swagger)** | http://localhost:8000/docs |
-| **管理后台** | http://localhost:8000/admin |
-| **后端可观测 (Logfire)** | 配置后可用 |
-
-### 默认管理员
-
-| 项目 | 值 |
-|------|-----|
-| 邮箱 | `admin@multi-agent.local` |
-| 密码 | 注册后自动提升为管理员 |
-
 ---
 
 ## 🧪 测试
